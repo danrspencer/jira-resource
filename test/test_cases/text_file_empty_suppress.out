@@ -1,0 +1,11 @@
+{
+  "params": {
+    "text_file": "sample-empty.txt",
+    "debug": "true"
+  },
+  "source": {
+      "url": "https://some.url",
+      "username": "concourse",
+      "password": "letmein"
+    }
+}

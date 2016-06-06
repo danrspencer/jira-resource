@@ -1,0 +1,30 @@
+{
+  "input": {
+    "params": {
+      "summary": "Inline static summary",
+      "description": "Inline static description",
+      "issue_type": "Bug"
+    },
+    "source": {
+      "url": "https://jira.url",
+      "username": "some_user",
+      "password": "awesome_pass",
+      "project": "PROJ"
+    }
+  },
+  "expected": {
+    "curl": "curl -D- -u some_user:awesome_pass -X POST -H \"Content-Type: application/json\" --data ${BODY} https://jira.url/rest/api/2/issue/",
+    "body": {
+      "fields": {
+        "project": {
+          "key": "PROJ"
+        },
+        "issuetype": {
+          "name": "Bug"
+        },
+        "summary": "Inline static summary\n",
+        "description": "Inline static description\n"
+      }
+    }
+  }
+}
