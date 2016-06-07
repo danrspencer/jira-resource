@@ -1,61 +1,64 @@
 #!/bin/bash
 
+get_text() {
+    # Get text and text file path
+    text=$(jq "(.params.${1} // \"\${FILE_CONTENT}\")" < "${payload}")
+    text_file=$(jq -r ".params.$1_file // \"\"" < "${payload}")
+
+    # Get text file content
+    FILE_CONTENT=""
+    if [[ -n ${text_file} ]]
+    then
+        if [[ -f ${text_file} ]]
+        then
+            FILE_CONTENT="$(cat "${text_file}")"
+
+            [[ -z ${FILE_CONTENT} ]] && FILE_CONTENT="_(no file content)_"
+        else
+            FILE_CONTENT="_(file not found)_"
+        fi
+    fi
+
+    # Attempt to str_replace $FILE_CONTENT in text with file content
+    text="$(eval printf ${text})"
+
+    # Set empty text stub and json encode
+    [[ -z ${text} ]] && text="_(missing text)_"
+    text=$(echo "${text}" | jq -R -s .)
+
+    # Remove tailing newline
+    text=$(echo "${text}" | sed -E 's/\\n"$/"/')
+
+    echo ${text}
+}
+
 set -e
 
-cd "${1}"
+cd ${1}
 
 exec 3>&1
 exec 1>&2
 
 # for jq
-PATH=/usr/local/bin:$PATH
+PATH=/usr/locs/bin:$PATH
 
 payload=$(mktemp /tmp/resource-in.XXXXXX)
 
-cat > "${payload}" <&0
+cat > ${payload} <&0
 
-silent="$(jq -r '.params.silent // "true"' < "${payload}")"
+silent=$(jq -r '.params.silent // "true"' < "${payload}")
 
-api_url="$(jq -r '.source.url' < "${payload}")"
-username="$(jq -r '.source.username' < "${payload}")"
-password="$(jq -r '.source.password' < "${payload}")"
-project="$(jq -r '.source.project' < "${payload}")"
+api_url=$(jq -r '.source.url' < "${payload}")
+username=$(jq -r '.source.username' < "${payload}")
+password=$(jq -r '.source.password' < "${payload}")
+project=$(jq -r '.source.project' < "${payload}")
 
-issue_type="$(jq -r '.params.issue_type' < "${payload}")"
+issue_type=$(jq -r '.params.issue_type' < "${payload}")
 
-### SUMMARY ###
-# Get summary and summary file path
-summary="$(jq '(.params.summary // "${SUMMARY_FILE_CONTENT}")' < "${payload}")"
-summary_file="$(jq -r '.params.summary_file // ""' < "${payload}")"
+summary=$(get_text "summary")
+description=$(get_text "description")
 
-# Get summary file content if exists
-SUMMARY_FILE_CONTENT=""
-[[ -n "${summary_file}" && -f "${summary_file}" ]] && SUMMARY_FILE_CONTENT="$(cat "${summary_file}")"
-
-# Attempt to str_replace $SUMMARY_FILE_CONTENT in summary with file content
-summary="$(eval printf ${summary} )"
-
-# Set empty text stub and json encode
-[[ -z "${summary}" ]] && summary="_(missing summary text)_"
-summary="$(echo "${summary}" | jq -R -s .)"
-
-### DESCRIPTION ###
-# Get description and description file path
-description="$(jq '(.params.description // "${DESCRIPTION_FILE_CONTENT}")' < "${payload}")"
-description_file="$(jq -r '.params.description_file // ""' < "${payload}")"
-
-# Get description file content if exists
-DESCRIPTION_FILE_CONTENT=""
-[[ -n "${description_file}" && -f "${description_file}" ]] && DESCRIPTION_FILE_CONTENT="$(cat "${description_file}")"
-
-# Attempt to str_replace $DESCRIPTION_FILE_CONTENT in description with file content
-description="$(eval printf ${description} )"
-
-# Set empty text stub and json encode
-[[ -z "${description}" ]] && description="_(missing description text)_"
-description="$(echo "${description}" | jq -R -s .)"
-
-body="$(cat <<EOF
+body=$(cat <<EOF
 {
   "fields": {
     "project": {
@@ -69,11 +72,11 @@ body="$(cat <<EOF
   }
 }
 EOF
-  )"
+  )
 
-curl_command="curl -D- -u ${username}:${password} -X POST -H 'Content-Type: application/json' --data '#body' ${api_url}/rest/api/2/issue/"
+curl_command="curl -D- -u ${username}:${password} -X POST -H 'Content-Type: application/json' --data #body# ${api_url}/rest/api/2/issue/"
 
-if [[ "$DEBUG" == "true" ]]
+if [[ ${DEBUG} == "true" ]]
 then
         json="$(cat <<EOF
 {
@@ -86,11 +89,8 @@ EOF
     exit 0
 fi
 
-echo ${curl_command}
-body=$(echo "${body}" | jq -c '.')
-curl_command=$(echo ${curl_command} | sed "s/#body/${body}/g")
-
-echo ${curl_command}
+body=$(echo ${body} | jq -c '.')
+curl_command=$(echo ${curl_command} | sed "s/#body#/'${body}'/g")
 eval $curl_command
 
 jq -n "{version:{timestamp:\"$(date +%s)\"}}" >&3

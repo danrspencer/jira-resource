@@ -1,0 +1,30 @@
+{
+  "input":{
+    "params":{
+      "summary_file":"resources/sample-empty.txt",
+      "description_file":"resources/sample-empty.txt",
+      "issue_type":"Feature"
+    },
+    "source":{
+      "url":"https://jira.url",
+      "username":"some_user",
+      "password":"awesome_pass",
+      "project":"PROJ"
+    }
+  },
+  "expected":{
+    "curl":"curl -D- -u some_user:awesome_pass -X POST -H 'Content-Type: application/json' --data #body# https://jira.url/rest/api/2/issue/",
+    "body":{
+      "fields":{
+        "project":{
+          "key":"PROJ"
+        },
+        "issuetype":{
+          "name":"Feature"
+        },
+        "summary":"_(no file content)_",
+        "description":"_(no file content)_"
+      }
+    }
+  }
+}

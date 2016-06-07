@@ -22,7 +22,7 @@ test() {
   pass=$((${pass} + $?))
 
   echo ""
-  echo "------------------------------------------------------------------------------"
+  echo "----------------------------------------------------------------------"
   echo "TESTING: $1"
 
   if [ ${pass} == 0 ]
@@ -45,6 +45,8 @@ test() {
     echo ""
     echo "FAILED!"
   fi
+
+  echo "----------------------------------------------------------------------"
 }
 
 export BUILD_PIPELINE_NAME='my-pipeline'
@@ -56,11 +58,11 @@ export DEBUG="true"
 # Run against the test case files
 for test_case in test_cases/*.json; do test $test_case; done
 
-echo "------------------------------------------------------------------------------"
 echo ""
 if [ ${failed} == 0 ]
 then
-    echo -e "All tests passed! :D"
+    echo "All tests passed! :D"
 else
-    echo -e "There were ${failed} failures :("
+    echo "There were ${failed} failures :("
 fi
+echo ""
