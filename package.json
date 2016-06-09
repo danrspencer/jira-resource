@@ -1,0 +1,28 @@
+{
+  "name": "jira-resource",
+  "version": "1.0.0",
+  "description": "Slack notification sending resource ===================================",
+  "main": "out.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jasmine-node spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danrspencer/jira-resource.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danrspencer/jira-resource/issues"
+  },
+  "homepage": "https://github.com/danrspencer/jira-resource#readme",
+  "devDependencies": {
+    "nock": "^1.4.0"
+  },
+  "dependencies": {
+    "sync-request": "^3.0.1"
+  }
+}

@@ -13,7 +13,11 @@
     }
   },
   "expected": {
-    "curl": "curl -D- -u some_user:awesome_pass -X POST -H 'Content-Type: application/json' --data #body# https://jira.url/rest/api/2/issue/",
+    "curls": {
+      "create": "curl -u some_user:awesome_pass -X POST -H 'Content-Type: application/json' --data '#body#' https://jira.url/rest/api/2/issue/",
+      "update":"curl -u some_user:awesome_pass -X PUT -H 'Content-Type: application/json' --data '#body#' https://jira.url/rest/api/2/issue/",
+      "search": "curl -u some_user:awesome_pass -X POST -H 'Content-Type: application/json' --data '#search#' https://jira.url/rest/api/2/search/"
+    },
     "body": {
       "fields": {
         "project": {
@@ -25,6 +29,14 @@
         "summary": "Inline static summary",
         "description": "Inline static description"
       }
+    },
+    "search": {
+      "jql": "project=PROJ AND summary~\"Inline static summary\" ORDER BY id DESC",
+      "maxResults": 1,
+      "fields": [
+        "key",
+        "summary"
+      ]
     }
   }
 }
