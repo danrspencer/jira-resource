@@ -5,6 +5,7 @@
 // This must be set BEFORE out.js is required for the debug info to show up
 process.env.DEBUG='*';
 
+const fs = require('fs');
 const out = require('./src/out.js');
 
 process.stdin.resume();

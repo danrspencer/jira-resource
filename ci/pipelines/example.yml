@@ -6,12 +6,7 @@ jobs:
   - put: jira
     params:
       summary: Example jira ticket
-      description:
-        text: |
-          Example text
-
-          From file: $FILE
-        file: jira-resource/spec/sample.out
+      description: Example text
       issue_type: Change
 
 resources:
