@@ -17,7 +17,7 @@ process.stdin.on('data', function(data) {
             process.exit(1);
         }
 
-        //process.oob1 = fs.createWriteStream(null, { fd: 4 });
-        //process.oob1.write(result);
+        process.oob1 = fs.createWriteStream(null, { fd: 3 });
+        process.oob1.write(result);
     });
 });

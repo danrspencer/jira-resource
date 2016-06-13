@@ -78,7 +78,6 @@ module.exports = (input, callback) => {
                     issue: issueKey
                 }
             };
-            debug(JSON.stringify(output, null, 2));
         } else {
             error = new Error('Could not create issue.');
         }
