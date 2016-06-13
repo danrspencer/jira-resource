@@ -403,6 +403,74 @@ describe('prometheus client', () => {
                 done();
             });
         });
+
+        it('can progress through multiple transitions', (done) => {
+            let issueId = 15805;
+
+            let input = concourseInput();
+            input.params.transitions = [
+                'Submit', 'Test', 'Reject'
+            ];
+
+            let transitions = [
+                [ { "id": "51", "name": "Submit" } ],
+                [ { "id": "69", "name": "Test" } ],
+                [ { "id": "12",  "name": "Complete" }, { "id": "13",  "name": "Reject" } ]
+            ];
+            nock(jiraUrl)
+                .get('/rest/api/2/issue/' + issueId + '/transitions/')
+                .basicAuth({ user: jiraUser, pass: jiraPass })
+                .reply(200, { "expand": "transitions", "transitions": transitions[0] })
+                .get('/rest/api/2/issue/' + issueId + '/transitions/')
+                .basicAuth({ user: jiraUser, pass: jiraPass })
+                .reply(200, { "expand": "transitions", "transitions": transitions[1] })
+                .get('/rest/api/2/issue/' + issueId + '/transitions/')
+                .basicAuth({ user: jiraUser, pass: jiraPass })
+                .reply(200, { "expand": "transitions", "transitions": transitions[2] });
+
+            let transition1 = nock(jiraUrl)
+                .post('/rest/api/2/issue/' + issueId + '/transitions/', {
+                    transition: {
+                        id: "51"
+                    }
+                })
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(204);
+
+            let transition2 = nock(jiraUrl)
+                .post('/rest/api/2/issue/' + issueId + '/transitions/', {
+                    transition: {
+                        id: "69"
+                    }
+                })
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(204);
+
+            let transition3 = nock(jiraUrl)
+                .post('/rest/api/2/issue/' + issueId + '/transitions/', {
+                    transition: {
+                        id: "13"
+                    }
+                })
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(204);
+
+            out(input, () => {
+                expect(transition1.isDone(), 'Transition 1').to.be.true;
+                expect(transition2.isDone(), 'Transition 2').to.be.true;
+                expect(transition3.isDone(), 'Transition 3').to.be.true;
+                done();
+            });
+        });
     });
 
 });

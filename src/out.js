@@ -1,5 +1,6 @@
 
 const _ = require('lodash');
+const async = require('async');
 const debug = require('debug')('jira-resource');
 const moment = require('moment');
 const request = require('request');
@@ -127,36 +128,59 @@ function processTrasitions(issueId, source, params, callback) {
     const transitionUrl = source.url + '/rest/api/2/issue/' + issueId + '/transitions/';
 
     if (!params.transitions) {
-        callback();
+        return callback();
     }
 
-    request({
-        method: 'GET',
-        uri: transitionUrl,
-        auth: {
-            username: source.username,
-            password: source.password
-        },
-        json: true
-    }, (error, response, body) => {
-        let transitionId = _.filter(body.transitions, (transition) => {
-            return transition.name == params.transitions[0]
-        })[0].id;
+    async.eachSeries(params.transitions, (nextTransition, next) => {
+        processTransition(transitionUrl, nextTransition, source, () => {
+            next();
+        });
+    }, callback);
+}
 
-        request({
-            method: 'POST',
-            uri: transitionUrl,
-            auth: {
-                username: source.username,
-                password: source.password
-            },
-            json: {
-                transition: {
-                    id: transitionId
+function processTransition(transitionUrl, transitionName, source, callback) {
+    async.waterfall([
+        (next) => {
+            debug('Searching for available transitions...');
+
+            request({
+                method: 'GET',
+                uri: transitionUrl,
+                auth: {
+                    username: source.username,
+                    password: source.password
+                },
+                json: true
+            }, (error, response, body) => {
+                debugResponse(response);
+                next(error, body);
+            })
+        },
+        (body, done) => {
+            let transitionId = _.filter(body.transitions, (transition) => {
+                return transition.name == transitionName
+            })[0].id;
+
+            debug('Performing transition %s (%s)', transitionName, transitionId);
+
+            request({
+                method: 'POST',
+                uri: transitionUrl,
+                auth: {
+                    username: source.username,
+                    password: source.password
+                },
+                json: {
+                    transition: {
+                        id: transitionId
+                    }
                 }
-            }
-        }, callback);
-    });
+            }, (error, response) => {
+                debugResponse(response);
+                done(error);
+            });
+        }
+    ], callback);
 }
 
 function replaceNowString(value) {
