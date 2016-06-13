@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha ./spec/  --async-only",
-    "test-watch": "node node_modules/mocha/bin/mocha ./spec/  --async-only --watch --growl"
+    "test-watch": "node node_modules/mocha/bin/mocha ./spec/  --async-only --watch --growl",
+    "test-watch-debug": "DEBUG=jira-resource node node_modules/mocha/bin/mocha ./spec/  --async-only --watch --growl"
   },
   "repository": {
     "type": "git",
