@@ -22,7 +22,7 @@ describe('jira resource', () => {
     it('checks for an existing issue', (done) => {
         let search = setupSearch();
 
-        out(concourseInput(), () => {
+        out(concourseInput(), '', () => {
             expect(search.isDone()).to.be.true;
             done();
         });
@@ -49,14 +49,14 @@ describe('jira resource', () => {
         });
 
         it('creates the jira issue', (done) => {
-            out(concourseInput(), () => {
+            out(concourseInput(), '',  () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
         });
 
         it('returns the issue key', (done) => {
-            out(concourseInput(), (error, result) => {
+            out(concourseInput(), '', (error, result) => {
                 expect(error).to.be.null;
                 expect(result).to.deep.equal({
                     version: {
@@ -86,7 +86,7 @@ describe('jira resource', () => {
                     }
                 });
 
-            out(input, () => {
+            out(input, '',  () => {
                 expect(createWithEnv.isDone()).to.be.true;
                 done();
             });
@@ -104,7 +104,7 @@ describe('jira resource', () => {
                     return Math.abs(duedate.diff(now, 's')) < 1;
                 });
 
-            out(input, () => {
+            out(input, '',  () => {
                 expect(createWithDate.isDone()).to.be.true;
                 done();
             });
@@ -125,7 +125,7 @@ describe('jira resource', () => {
                 return Math.abs(expectedDueDate.diff(duedate, 's')) < 1;
             });
 
-            out(input, () => {
+            out(input, '',  () => {
                 expect(createWithDate.isDone()).to.be.true;
                 done();
             });
@@ -148,7 +148,7 @@ describe('jira resource', () => {
                         && Math.abs(expectedAbitago.diff(abitago, 's')) < 1;
                 });
 
-            out(input, () => {
+            out(input, '',  () => {
                 expect(createWithDate.isDone()).to.be.true;
                 done();
             });
@@ -178,7 +178,7 @@ describe('jira resource', () => {
                 }
             });
 
-            out(input, () => {
+            out(input, '',  () => {
                 expect(createWithCustom.isDone()).to.be.true;
                 done();
             });
@@ -213,7 +213,7 @@ describe('jira resource', () => {
                 }
             });
 
-            out(input, () => {
+            out(input, '',  () => {
                 expect(createWithCustom.isDone()).to.be.true;
                 done();
             });
@@ -248,7 +248,7 @@ describe('jira resource', () => {
                     }
                 });
 
-            out(concourseInput(), (error, result) => {
+            out(concourseInput(), '', (error, result) => {
                 expect(error.message).to.equal('Could not create issue.');
                 expect(result).to.be.null;
                 done();
@@ -295,14 +295,14 @@ describe('jira resource', () => {
         });
 
         it('updates the issue', (done) => {
-            out(concourseInput(), () => {
+            out(concourseInput(), '',  () => {
                 expect(update.isDone()).to.be.true;
                 done();
             });
         });
 
         it('returns the issue key', (done) => {
-            out(concourseInput(), (error, result) => {
+            out(concourseInput(), '', (error, result) => {
                 expect(error).to.be.null;
                 expect(result).to.deep.equal({
                     version: {
@@ -331,7 +331,7 @@ describe('jira resource', () => {
                     }
                 });
 
-            out(concourseInput(), (error, result) => {
+            out(concourseInput(), '', (error, result) => {
                 expect(error.message).to.equal('Could not create issue.');
                 expect(result).to.be.null;
                 done();
@@ -412,7 +412,7 @@ describe('jira resource', () => {
                 'Submit'
             ];
 
-            out(input, () => {
+            out(input, '',  () => {
                 expect(transition.isDone()).to.be.true;
                 done();
             });
@@ -458,7 +458,7 @@ describe('jira resource', () => {
 
 
 
-            out(input, () => {
+            out(input, '',  () => {
                 expect(transition.isDone()).to.be.true;
                 done();
             });
@@ -522,7 +522,7 @@ describe('jira resource', () => {
                 })
                 .reply(204);
 
-            out(input, () => {
+            out(input, '',  () => {
                 expect(transition1.isDone(), 'Transition 1').to.be.true;
                 expect(transition2.isDone(), 'Transition 2').to.be.true;
                 expect(transition3.isDone(), 'Transition 3').to.be.true;
@@ -582,7 +582,7 @@ describe('jira resource', () => {
                 })
                 .reply(204);
 
-            out(input, () => {
+            out(input, '',  () => {
                 expect(transition.isDone()).to.be.true;
                 done();
             });
@@ -599,7 +599,7 @@ describe('jira resource', () => {
         it('can use a file for text', (done) => {
             let input = concourseInput();
             input.params.fields.description = {
-                file: 'spec/sample.out'
+                file: 'sample.out'
             };
 
             let create = setupCreate({
@@ -615,7 +615,7 @@ describe('jira resource', () => {
                 }
             });
 
-            out(input, () => {
+            out(input, process.cwd() + '/' + 'spec',  () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
@@ -625,7 +625,7 @@ describe('jira resource', () => {
             let input = concourseInput();
             input.params.fields.description = {
                 text: "Static text - $FILE",
-                file: 'spec/sample.out'
+                file: 'sample.out'
             };
 
             let create = setupCreate({
@@ -641,7 +641,7 @@ describe('jira resource', () => {
                 }
             });
 
-            out(input, () => {
+            out(input, process.cwd() + '/' + 'spec',  () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
