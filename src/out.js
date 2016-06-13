@@ -75,7 +75,7 @@ module.exports = (input, callback) => {
         if (issueKey) {
             output = {
                 version: {
-                    issue: issueKey
+                    ref: issueKey
                 }
             };
         } else {

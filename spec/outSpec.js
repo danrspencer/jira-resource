@@ -60,7 +60,7 @@ describe('jira resource', () => {
                 expect(error).to.be.null;
                 expect(result).to.deep.equal({
                     version: {
-                        issue: "ATP-1"
+                        ref: "ATP-1"
                     }
                 });
                 done();
@@ -306,7 +306,7 @@ describe('jira resource', () => {
                 expect(error).to.be.null;
                 expect(result).to.deep.equal({
                     version: {
-                        issue: "ATP-1"
+                        ref: "ATP-1"
                     }
                 });
                 done();
