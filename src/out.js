@@ -2,11 +2,12 @@
 const _ = require('lodash');
 const async = require('async');
 const debug = require('debug')('jira-resource');
+const fs = require('fs');
 const moment = require('moment');
 const request = require('request');
 
 /** Uncomment the below for useful debug shizzles **/
-//require('request-debug')(request);
+// require('request-debug')(request);
 
 module.exports = (input, callback) => {
     const source = input.source;
@@ -14,47 +15,60 @@ module.exports = (input, callback) => {
 
     debug('Searching for issue: %s', input.params.summary);
 
-    searchBySummary(source, params, (error, response, body) => {
-
-        debugResponse(response);
-
-        let issueExists = body.issues.length == 0;
-
-        if (issueExists) {
-            debug('Issue doesn\'t exist, creating new issue...');
-
-            createIssue(source, params, (error, response, body) => {
-                if (!body) {
-                    // TODO: Better error handling
-                    return callback();
-                }
-
+    async.waterfall([
+        (next) => {
+            searchBySummary(source, params, (error, response, body) => {
                 debugResponse(response);
-
-                callback({
-                    version: {
-                        issue: body.key
-                    }
-                });
+                next(error, body);
             });
-        } else {
-            let issueId = body.issues[0].id;
-            let issueKey = body.issues[0].key;
+        },
+        (body, next) => {
+            let issueExists = body.issues.length > 0;
 
-            debug('Issue exists [%s], updating issue...', issueKey);
+            if (!issueExists) {
+                debug('Issue doesn\'t exist, creating new issue...');
 
-            updateIssue(issueId, source, params, (error, response, body) => {
-                debugResponse(response);
+                createIssue(source, params, (error, response, body) => {
+                    if (!body) {
+                        // TODO: Better error handling
+                        return next(error);
+                    }
 
-                processTrasitions(issueId, source, params, () => {
-                    callback({
-                        version: {
-                            issue: issueKey
-                        }
-                    });
+                    debugResponse(response);
+
+                    let issueId = body.id;
+                    let issueKey = body.key;
+
+                    next(error, issueId, issueKey);
                 });
+            } else {
+                let issueId = body.issues[0].id;
+                let issueKey = body.issues[0].key;
+
+                debug('Issue exists [%s], updating issue...', issueKey);
+
+                updateIssue(issueId, source, params, (error, response) => {
+                    debugResponse(response);
+
+                    next(error, issueId, issueKey);
+                });
+            }
+        },
+        (issueId, issueKey, done) => {
+            if (!params.transitions) {
+                return done(issueKey)
+            }
+
+            processTrasitions(issueId, source, params, () => {
+                done(issueKey);
             });
         }
+    ], (issueKey) => {
+        callback({
+            version: {
+                issue: issueKey
+            }
+        });
     });
 };
 
@@ -108,6 +122,7 @@ function requestIssue(issueUrl, method, source, params, callback) {
     params = parseCustomFields(params);
 
     issue.fields = _(params).omit([ 'issue_type', 'custom_fields', 'transitions' ])
+        .mapValues(replaceTextFileString)
         .mapValues(replaceNowString)
         .merge(issue.fields);
 
@@ -126,10 +141,6 @@ function requestIssue(issueUrl, method, source, params, callback) {
 
 function processTrasitions(issueId, source, params, callback) {
     const transitionUrl = source.url + '/rest/api/2/issue/' + issueId + '/transitions/';
-
-    if (!params.transitions) {
-        return callback();
-    }
 
     async.eachSeries(params.transitions, (nextTransition, next) => {
         processTransition(transitionUrl, nextTransition, source, () => {
@@ -161,7 +172,7 @@ function processTransition(transitionUrl, transitionName, source, callback) {
                 return transition.name == transitionName
             })[0].id;
 
-            debug('Performing transition %s (%s)', transitionName, transitionId);
+            debug('Performing transition: %s (%s)', transitionName, transitionId);
 
             request({
                 method: 'POST',
@@ -183,6 +194,20 @@ function processTransition(transitionUrl, transitionName, source, callback) {
     ], callback);
 }
 
+function replaceTextFileString(value) {
+    if (typeof(value) != 'object') {
+        return value;
+    }
+
+    let fileContent = value.file
+        ? fs.readFileSync(value.file, 'utf-8')
+        : '';
+
+    return value.text
+        ? value.text.replace('$FILE', fileContent)
+        : fileContent;
+}
+
 function replaceNowString(value) {
     return value.replace(/\$NOW([-+][0-9]+)?([ywdhms])?/, (match, change, unit) => {
         let date = moment();
@@ -201,7 +226,7 @@ function debugResponse(response, body) {
     debug(
         'Result: (%s) %s',
         response.statusCode,
-        JSON.stringify(response.body || {}, null, 2)
+        body ? JSON.stringify(body, null, 2) : ''
     );
 }
 

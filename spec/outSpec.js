@@ -277,9 +277,9 @@ describe('prometheus client', () => {
 
     describe('transitions', () => {
 
-        beforeEach(() => {
-            let issueId = 15805;
+        let issueId = 15805;
 
+        beforeEach(() => {
             setupSearch([
                 {
                     expand: "operations,versionedRepresentations,editmeta,changelog,renderedFields",
@@ -314,8 +314,6 @@ describe('prometheus client', () => {
 
 
         it('updates an issue with a transition', (done) => {
-            let issueId = 15805;
-
             nock(jiraUrl)
                 .get('/rest/api/2/issue/' + issueId + '/transitions/')
                 .basicAuth({
@@ -357,8 +355,6 @@ describe('prometheus client', () => {
         });
 
         it('can handle multiple possible transitions', (done) => {
-            let issueId = 15805;
-
             let input = concourseInput();
             input.params.transitions = [
                 'Reject'
@@ -405,8 +401,6 @@ describe('prometheus client', () => {
         });
 
         it('can progress through multiple transitions', (done) => {
-            let issueId = 15805;
-
             let input = concourseInput();
             input.params.transitions = [
                 'Submit', 'Test', 'Reject'
@@ -468,6 +462,122 @@ describe('prometheus client', () => {
                 expect(transition1.isDone(), 'Transition 1').to.be.true;
                 expect(transition2.isDone(), 'Transition 2').to.be.true;
                 expect(transition3.isDone(), 'Transition 3').to.be.true;
+                done();
+            });
+        });
+
+        it('performs transitions on new issues', (done) => {
+
+            let input = concourseInput();
+            input.params.transitions = [
+                'Submit'
+            ];
+
+            nock.cleanAll();
+
+            setupSearch();
+
+            setupCreate({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "TEST 1.106.0",
+                    description: "Inline static description"
+                }
+            });
+
+            nock(jiraUrl)
+                .get('/rest/api/2/issue/' + issueId + '/transitions/')
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(200, {
+                    "expand": "transitions",
+                    "transitions": [
+                        {
+                            "id": "51",
+                            "name": "Submit"
+                        }
+                    ]
+                });
+
+            let transition = nock(jiraUrl)
+                .post('/rest/api/2/issue/' + issueId + '/transitions/', {
+                    transition: {
+                        id: "51"
+                    }
+                })
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(204);
+
+            out(input, () => {
+                expect(transition.isDone()).to.be.true;
+                done();
+            });
+        });
+    });
+
+    describe('files', () => {
+
+        beforeEach(() => {
+            setupSearch();
+        });
+
+        it('can use a file for text', (done) => {
+            let input = concourseInput();
+            input.params.description = {
+                file: 'spec/sample.out'
+            };
+
+            create = setupCreate({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "TEST 1.106.0",
+                    description: "Text from file"
+                }
+            });
+
+            out(input, () => {
+                expect(create.isDone()).to.be.true;
+                done();
+            });
+        });
+
+        it('replaces $TEXT_FILE with contents of file', (done) => {
+            let input = concourseInput();
+            input.params.description = {
+                text: "Static text - $FILE",
+                file: 'spec/sample.out'
+            };
+
+            create = setupCreate({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "TEST 1.106.0",
+                    description: "Static text - Text from file"
+                }
+            });
+
+            out(input, () => {
+                expect(create.isDone()).to.be.true;
                 done();
             });
         });
