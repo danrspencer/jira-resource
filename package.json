@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jasmine-node spec"
+    "test": "node node_modules/mocha/bin/mocha ./spec/  --async-only",
+    "test-watch": "node node_modules/mocha/bin/mocha ./spec/  --async-only --watch --growl"
   },
   "repository": {
     "type": "git",
@@ -20,9 +21,15 @@
   },
   "homepage": "https://github.com/danrspencer/jira-resource#readme",
   "devDependencies": {
-    "nock": "^1.4.0"
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "nock": "^1.4.0",
+    "request-debug": "^0.2.0"
   },
   "dependencies": {
+    "debug": "^2.2.0",
+    "lodash": "^4.13.1",
+    "moment": "^2.13.0",
     "sync-request": "^3.0.1"
   }
 }

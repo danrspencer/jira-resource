@@ -126,6 +126,7 @@ search=$(echo ${search} | jq -c '.')
 search_curl=$(echo ${search_curl} | sed "s/#search#/${search//\"/\\\"}/g")
 search_result=$(eval "${search_curl} -s")
 
+echo ${search_curl}
 echo ${search_result} | jq .
 
 create=$(echo ${create} | jq -c '.')
@@ -139,6 +140,7 @@ then
 
     echo "Issue exists: $issue_key - ${summary//\"/}"
     echo "Updating issue..."
+    echo $update_curl
     echo ${update} | jq .
     code="$(eval "${update_curl}${issue_key} -s --write-out %{http_code}")"
 else
