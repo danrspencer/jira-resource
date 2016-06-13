@@ -12,4 +12,11 @@ login:
 pipeline:
 	./fly --target live set-pipeline --pipeline jira-resource \
                                      --config pipelines/pipeline.yml \
+                                     --load-vars-from resources/config.yml \
+                                     --var "private-repo-key=`cat ~/.ssh/id_rsa`"
+
+example:
+	./fly --target live set-pipeline --pipeline jira-resource-example \
+                                     --config pipelines/example.yml \
+                                     --load-vars-from resources/config.yml \
                                      --var "private-repo-key=`cat ~/.ssh/id_rsa`"
