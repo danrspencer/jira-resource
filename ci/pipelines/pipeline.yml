@@ -20,7 +20,7 @@ jobs:
   - get: jira-resource
     trigger: true
     passed: [ test ]
-  - get: version
+  - put: version
     params:
       bump: patch
   - put: docker-image-jira-resource
@@ -28,9 +28,7 @@ jobs:
       build: jira-resource
       tag: version/version
       tag_as_latest: true
-  - put: version
-    params:
-      file: version/version
+
 
 resources:
   - name: jira-resource
