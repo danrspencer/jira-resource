@@ -29,6 +29,16 @@ jobs:
       tag: version/version
       tag_as_latest: true
 
+- name: minor
+  - put: version
+    params:
+      bump: minor
+
+- name: major
+  - put: version
+    params:
+      bump: major
+
 
 resources:
   - name: jira-resource

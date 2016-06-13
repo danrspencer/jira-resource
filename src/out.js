@@ -14,7 +14,7 @@ module.exports = (input, callback) => {
     const source = input.source;
     const params = input.params;
 
-    debug('Searching for issue: %s', input.params.summary);
+    debug('Searching for issue: %s', input.params.fields.summary);
 
     async.waterfall([
         (next) => {
@@ -216,11 +216,11 @@ function replaceTextFileString(value) {
     let filePath = process.cwd() + '/' + value.file;
     let fileContent;
 
-    try {
+    //try {
         fileContent = fs.readFileSync(filePath, 'utf-8');
-    } catch(error) {
-        fileContent = '--Error loading file--';
-    }
+    //} catch(error) {
+    //    fileContent = '--Error loading file--';
+    //}
 
     return value.text
         ? value.text.replace('$FILE', fileContent)
