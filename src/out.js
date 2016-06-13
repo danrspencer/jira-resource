@@ -214,7 +214,7 @@ function replaceTextFileString(value) {
     }
 
     let fileContent = value.file
-        ? fs.readFileSync(value.file, 'utf-8')
+        ? fs.readFileSync(process.cwd() + value.file, 'utf-8')
         : '';
 
     return value.text

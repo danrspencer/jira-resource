@@ -591,6 +591,7 @@ describe('jira resource', () => {
 
     describe('files', () => {
 
+
         beforeEach(() => {
             setupSearch();
         });

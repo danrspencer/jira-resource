@@ -7,13 +7,15 @@ jobs:
       issue_type: Change
       fields:
         summary: Example jira ticket
-        description: Example text
+        description:
+          file: jira-resource/spec/sample.out
+          text: Static text - $FILE
         environment: PROD
         duedate: $NOW+1H
       custom_fields:
         agcc_impact:
           id: 10201
-          value: "none"
+          value: none
 
 resources:
   - name: jira-resource
