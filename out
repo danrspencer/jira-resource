@@ -8,7 +8,7 @@ process.env.DEBUG='*';
 const fs = require('fs');
 const out = require('./src/out.js');
 
-let putDir = process.argv[0];
+let putDir = process.argv[2];
 
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
