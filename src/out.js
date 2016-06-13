@@ -56,6 +56,10 @@ module.exports = (input, callback) => {
             }
         },
         (issueId, issueKey, done) => {
+            if (!issueId || !issueKey) {
+                return done();
+            }
+
             if (!params.transitions) {
                 return done(issueKey)
             }
@@ -65,11 +69,21 @@ module.exports = (input, callback) => {
             });
         }
     ], (issueKey) => {
-        callback({
-            version: {
-                issue: issueKey
-            }
-        });
+        let error = null;
+        let output = null;
+
+        if (issueKey) {
+            output = {
+                version: {
+                    issue: issueKey
+                }
+            };
+            debug(JSON.stringify(output, null, 2));
+        } else {
+            error = 'Could not create issue.'
+        }
+
+        callback(error, output);
     });
 };
 
@@ -223,14 +237,6 @@ function replaceNowString(value) {
     });
 }
 
-function debugResponse(response, body) {
-    debug(
-        'Result: (%s) %s',
-        response.statusCode,
-        body ? JSON.stringify(body, null, 2) : '-empty body-'
-    );
-}
-
 function parseCustomFields(params) {
     if (!params.custom_fields) {
         return params;
@@ -244,4 +250,12 @@ function parseCustomFields(params) {
             return value.value
         })
         .merge(params);
+}
+
+function debugResponse(response) {
+    debug(
+        'Result: (%s) %s',
+        response.statusCode,
+        response.body ? JSON.stringify(response.body, null, 2) : '-empty body-'
+    );
 }

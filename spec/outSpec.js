@@ -56,7 +56,8 @@ describe('jira resource', () => {
         });
 
         it('returns the issue key', (done) => {
-            out(concourseInput(), (result) => {
+            out(concourseInput(), (error, result) => {
+                expect(error).to.be.null;
                 expect(result).to.deep.equal({
                     version: {
                         issue: "ATP-1"
@@ -217,6 +218,42 @@ describe('jira resource', () => {
                 done();
             });
         });
+
+        it('can handle an error response', (done) => {
+            nock.cleanAll();
+
+            setupSearch();
+            nock(jiraUrl)
+                .post('/rest/api/2/issue/', {
+                    fields: {
+                        project: {
+                            key: "ATP"
+                        },
+                        issuetype: {
+                            name: "Bug"
+                        },
+                        summary: "TEST 1.106.0",
+                        description: "Inline static description"
+                    }
+                })
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(400, {
+                    errorMessages:[],
+                    errors: {
+                        environment: "Environment is required.",
+                        duedate: "Due Date is required."
+                    }
+                });
+
+            out(concourseInput(), (error, result) => {
+                expect(error).to.equal('Could not create issue.');
+                expect(result).to.be.null;
+                done();
+            });
+        });
     });
 
     describe('existing issue', () => {
@@ -265,7 +302,8 @@ describe('jira resource', () => {
         });
 
         it('returns the issue key', (done) => {
-            out(concourseInput(), (result) => {
+            out(concourseInput(), (error, result) => {
+                expect(error).to.be.null;
                 expect(result).to.deep.equal({
                     version: {
                         issue: "ATP-1"
