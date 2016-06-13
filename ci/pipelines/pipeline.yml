@@ -37,14 +37,13 @@ resources:
       uri: git@github.com:danrspencer/jira-resource.git
       branch: node-version
       private_key: {{private-repo-key}}
-      ignore_paths: version
 
   - name: version
     type: semver
     source:
       driver: git
       uri: git@github.com:danrspencer/jira-resource.git
-      branch: node-version
+      branch: version
       private_key: {{private-repo-key}}
       file: version
 
