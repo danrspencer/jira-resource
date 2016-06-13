@@ -1,6 +1,21 @@
 jobs:
+- name: test
+  plan:
+  - get: jira-resource
+    trigger: true
+  - task: run-tests
+    config:
+      platform: linux
+      image_resource:
+        source:
+          repository: mhart/alpine-node
+        type: docker-image
+      inputs:
+      - name: jira-resource
+      run:
+        path: (cd jira-resource && npm install && npm test)
+
 - name: build
-  public: true
   plan:
   - get: jira-resource
     trigger: true
@@ -13,7 +28,7 @@ resources:
     type: git
     source:
       uri: git@github.com:danrspencer/jira-resource.git
-      branch: master
+      branch: node-version
       private_key: {{private-repo-key}}
 
   - name: docker-image-jira-resource

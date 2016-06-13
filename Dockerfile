@@ -1,4 +1,4 @@
-FROM gliderlabs/alpine:3.3
+FROM mhart/alpine-node:6.2
 
 RUN apk add --no-cache curl bash jq
 
