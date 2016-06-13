@@ -22,7 +22,7 @@ resources:
     type: git
     source:
       uri: git@github.com:danrspencer/jira-resource.git
-      branch: node-version
+      branch: master
       private_key: {{private-repo-key}}
 
   - name: jira

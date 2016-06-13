@@ -15,7 +15,19 @@ jobs:
       run:
         path: jira-resource/ci/scripts/run-tests
 
-- name: build
+- name: major
+  plan:
+  - put: version
+    params:
+      bump: major
+
+- name: minor
+  plan:
+  - put: version
+    params:
+      bump: minor
+
+- name: patch
   plan:
   - get: jira-resource
     trigger: true
@@ -23,29 +35,26 @@ jobs:
   - put: version
     params:
       bump: patch
+
+- name: build
+  plan:
+  - get: jira-resource
+    trigger: true
+    passed: [ patch ]
+  - get: version
+    trigger: true
   - put: docker-image-jira-resource
     params:
       build: jira-resource
       tag: version/version
       tag_as_latest: true
 
-- name: minor
-  - put: version
-    params:
-      bump: minor
-
-- name: major
-  - put: version
-    params:
-      bump: major
-
-
 resources:
   - name: jira-resource
     type: git
     source:
       uri: git@github.com:danrspencer/jira-resource.git
-      branch: node-version
+      branch: master
       private_key: {{private-repo-key}}
 
   - name: version
