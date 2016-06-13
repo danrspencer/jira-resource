@@ -9,6 +9,7 @@ process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', function(data) {
     out(JSON.parse(data), (result) => {
-        console.log(result);
+        process.oob1 = fs.createWriteStream(null, { fd: 3 });
+        process.oob1.write(result);
     });
 });
