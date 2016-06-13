@@ -14,9 +14,10 @@ process.stdin.on('data', function(data) {
     out(JSON.parse(data), (error, result) => {
         if (error) {
             process.stderr.write(error.message);
-        } else {
-            process.oob1 = fs.createWriteStream(null, { fd: 3 });
-            process.oob1.write(result);
+            process.exit(1);
         }
+
+        process.oob1 = fs.createWriteStream(null, { fd: 3 });
+        process.oob1.write(result);
     });
 });
