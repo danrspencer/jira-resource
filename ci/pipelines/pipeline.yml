@@ -19,6 +19,7 @@ jobs:
   plan:
   - get: jira-resource
     trigger: true
+    passed: [ test ]
   - put: docker-image-jira-resource
     params:
       build: jira-resource

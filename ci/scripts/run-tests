@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd jira-resource
+
+npm install
+npm test
