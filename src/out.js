@@ -86,7 +86,7 @@ function searchBySummary(source, params, callback) {
         ]
     };
 
-    debug('Sending search: %s', JSON.stringify(search, null, 2));
+    debug('Sending search: %s', jql);
 
     request({
         method: 'POST',
@@ -227,7 +227,7 @@ function debugResponse(response, body) {
     debug(
         'Result: (%s) %s',
         response.statusCode,
-        body ? JSON.stringify(body, null, 2) : ''
+        body ? JSON.stringify(body, null, 2) : '-empty body-'
     );
 }
 
