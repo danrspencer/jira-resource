@@ -1,5 +1,7 @@
 #!/usr/bin/node
 
+'use strict'
+
 // This must be set BEFORE out.js is required for the debug info to show up
 process.env.DEBUG='*';
 
