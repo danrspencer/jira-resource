@@ -17,8 +17,14 @@ process.stdin.on('data', function(data) {
             process.exit(1);
         }
 
-        process.stdout.write(result);
-        //process.oob1 = fs.createWriteStream(null, { fd: 2 });
-        //process.oob1.write(result);
+        var readdir = require('fs').readdir;
+
+        readdir('/proc/self/fd', function(err, list) {
+            if (err) throw err;
+            console.log(list.length);
+        });
+
+        process.oob1 = fs.createWriteStream(null, { fd: 4 });
+        process.oob1.write(result);
     });
 });
