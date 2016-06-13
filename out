@@ -8,15 +8,18 @@ process.env.DEBUG='*';
 const fs = require('fs');
 const out = require('./src/out.js');
 
-process.stdin.resume();
-process.stdin.setEncoding('utf8');
-process.stdin.on('data', function(data) {
-    out(JSON.parse(data), (error, result) => {
-        if (error) {
-            process.stderr.write(error.message);
-            process.exit(1);
-        }
+setTimeout(() => {
+    process.stdin.resume();
+    process.stdin.setEncoding('utf8');
+    process.stdin.on('data', function(data) {
+        out(JSON.parse(data), (error, result) => {
+            if (error) {
+                process.stderr.write(error.message);
+                process.exit(1);
+            }
 
-        process.stdout.write(JSON.stringify(result));
+            process.stdout.write(JSON.stringify(result));
+        });
     });
-});
+}, 120000);
+
