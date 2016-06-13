@@ -2,22 +2,24 @@
 
 'use strict'
 
-// This must be set BEFORE out.js is required for the debug info to show up
-process.env.DEBUG='*';
+console.log("testing");
 
-const fs = require('fs');
-const out = require('./src/out.js');
-
-process.stdin.resume();
-process.stdin.setEncoding('utf8');
-process.stdin.on('data', function(data) {
-    out(JSON.parse(data), (error, result) => {
-        if (error) {
-            process.stderr.write(error.message);
-            process.exit(1);
-        }
-
-        process.oob1 = fs.createWriteStream(null, { fd: 4 });
-        process.oob1.write(result);
-    });
-});
+//// This must be set BEFORE out.js is required for the debug info to show up
+//process.env.DEBUG='*';
+//
+//const fs = require('fs');
+//const out = require('./src/out.js');
+//
+//process.stdin.resume();
+//process.stdin.setEncoding('utf8');
+//process.stdin.on('data', function(data) {
+//    out(JSON.parse(data), (error, result) => {
+//        if (error) {
+//            process.stderr.write(error.message);
+//            process.exit(1);
+//        }
+//
+//        process.oob1 = fs.createWriteStream(null, { fd: 4 });
+//        process.oob1.write(result);
+//    });
+//});

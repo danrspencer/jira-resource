@@ -20,9 +20,17 @@ jobs:
   - get: jira-resource
     trigger: true
     passed: [ test ]
+  - get: version
+    params:
+      bump: patch
   - put: docker-image-jira-resource
     params:
       build: jira-resource
+      tag: version/version
+      tag_as_latest: true
+  - put: version
+    params:
+      file: version/version
 
 resources:
   - name: jira-resource
@@ -31,6 +39,16 @@ resources:
       uri: git@github.com:danrspencer/jira-resource.git
       branch: node-version
       private_key: {{private-repo-key}}
+      ignore_paths: version
+
+  - name: version
+    type: semver
+    source:
+      driver: git
+      uri: git@github.com:danrspencer/jira-resource.git
+      branch: node-version
+      private_key: {{private-repo-key}}
+      file: version
 
   - name: docker-image-jira-resource
     type: docker-image
