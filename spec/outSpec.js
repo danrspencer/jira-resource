@@ -538,7 +538,7 @@ describe('prometheus client', () => {
                 file: 'spec/sample.out'
             };
 
-            create = setupCreate({
+            let create = setupCreate({
                 fields: {
                     project: {
                         key: "ATP"
@@ -564,7 +564,7 @@ describe('prometheus client', () => {
                 file: 'spec/sample.out'
             };
 
-            create = setupCreate({
+            let create = setupCreate({
                 fields: {
                     project: {
                         key: "ATP"
