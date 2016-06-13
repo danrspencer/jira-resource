@@ -19,6 +19,8 @@ process.stdin.on('data', function(data) {
 
         var readdir = require('fs').readdir;
 
+
+        console.log('Getting number of fds')
         readdir('/proc/self/fd', function(err, list) {
             if (err) throw err;
             console.log(list.length);

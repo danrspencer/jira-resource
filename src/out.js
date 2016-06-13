@@ -254,7 +254,7 @@ function parseCustomFields(params) {
 
 function debugResponse(response) {
     debug(
-        'Result: (%s) %s',
+        'Response: (%s) %s',
         response.statusCode,
         response.body ? JSON.stringify(response.body, null, 2) : '-empty body-'
     );
