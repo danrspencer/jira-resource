@@ -17,11 +17,6 @@ process.stdin.on('data', function(data) {
             process.exit(1);
         }
 
-        console.log('going to try and send the result');
-        console.log(result);
-        //process.stdout.write(result);
-        //
-        process.oob1 = fs.createWriteStream(null, { fd: 3 });
-        process.oob1.write(result);
+        process.stdout.write(JSON.stringify(result));
     });
 });
