@@ -2,7 +2,6 @@ jobs:
 - name: update-jira
   plan:
   - get: jira-resource
-    trigger: true
   - put: jira
     params:
       summary: Example jira ticket
