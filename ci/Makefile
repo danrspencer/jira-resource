@@ -11,5 +11,5 @@ login:
 
 pipeline:
 	./fly --target live set-pipeline --pipeline jira-resource \
-                                     --config pipeline.yml \
+                                     --config pipelines/pipeline.yml \
                                      --var "private-repo-key=`cat ~/.ssh/id_rsa`"

@@ -1,6 +1,8 @@
-FROM mhart/alpine-node:6.2
+FROM alpine:3.3
 
-RUN apk add --no-cache curl bash jq
+RUN apk add --no-cache \
+    bash \
+    nodejs
 
 COPY check /opt/resource/check
 COPY in    /opt/resource/in

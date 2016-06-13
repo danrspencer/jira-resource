@@ -8,12 +8,12 @@ jobs:
       platform: linux
       image_resource:
         source:
-          repository: mhart/alpine-node
+          repository: danrspencer/jira-resource
         type: docker-image
       inputs:
       - name: jira-resource
       run:
-        path: (cd jira-resource && npm install && npm test)
+        path: jira-resource/ci/scripts/run-tests
 
 - name: build
   plan:
