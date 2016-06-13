@@ -6,4 +6,4 @@ real.json
 .vagrant
 
 fly
-credentials.yml
+config.yml

@@ -1,0 +1,38 @@
+jobs:
+- name: update-jira
+  plan:
+  - get: jira-resource
+    trigger: true
+  - put: jira
+    params:
+      summary: Example jira ticket
+      description:
+        text: |
+          Example text
+
+          From file: $FILE
+        file: jira-resource/spec/sample.out
+      issue_type: Change
+
+resources:
+  - name: jira-resource
+    type: git
+    source:
+      uri: git@github.com:danrspencer/jira-resource.git
+      branch: node-version
+      private_key: {{private-repo-key}}
+
+  - name: jira
+    type: jira
+    source:
+      url: {{jira-url}}
+      username: {{jira-username}}
+      password: {{jira-password}}
+      project: {{jira-project}}
+
+resource_types:
+- name: jira
+  type: docker-image
+  source:
+    repository: danrspencer/jira-resource
+    tag: latest
