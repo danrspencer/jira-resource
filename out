@@ -17,6 +17,8 @@ process.stdin.on('data', function(data) {
             process.exit(1);
         }
 
+        console.log(process.argv[1]);
+
         process.stdout.write(JSON.stringify(result));
     });
 });

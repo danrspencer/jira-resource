@@ -20,7 +20,7 @@ module.exports = (input, callback) => {
         (next) => {
             searchBySummary(source, params, (error, response, body) => {
                 debugResponse(response);
-                next(error, body);
+                next(null, body);
             });
         },
         (body, next) => {
@@ -32,7 +32,7 @@ module.exports = (input, callback) => {
                 createIssue(source, params, (error, response, body) => {
                     if (!body) {
                         // TODO: Better error handling
-                        return next(error);
+                        return next(new Error('Could not create issue.'));
                     }
 
                     debugResponse(response);
@@ -40,7 +40,7 @@ module.exports = (input, callback) => {
                     let issueId = body.id;
                     let issueKey = body.key;
 
-                    next(error, issueId, issueKey);
+                    next(null, issueId, issueKey);
                 });
             } else {
                 let issueId = body.issues[0].id;
@@ -51,25 +51,29 @@ module.exports = (input, callback) => {
                 updateIssue(issueId, source, params, (error, response) => {
                     debugResponse(response);
 
-                    next(error, issueId, issueKey);
+                    if (response.statusCode < 200 && 300 <= response.statusCode) {
+                        next(new Error());
+                        return;
+                    }
+
+                    next(null, issueId, issueKey);
                 });
             }
         },
         (issueId, issueKey, done) => {
             if (!issueId || !issueKey) {
-                return done();
+                return done(null);
             }
 
             if (!params.transitions) {
-                return done(issueKey)
+                return done(null, issueKey)
             }
 
             processTrasitions(issueId, source, params, () => {
-                done(issueKey);
+                done(null, issueKey);
             });
         }
-    ], (issueKey) => {
-        let error = null;
+    ], (error, issueKey) => {
         let output = null;
 
         if (issueKey) {
@@ -78,7 +82,7 @@ module.exports = (input, callback) => {
                     ref: issueKey
                 }
             };
-        } else {
+        } else if (!error) {
             error = new Error('Could not create issue.');
         }
 

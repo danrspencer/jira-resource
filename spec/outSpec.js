@@ -219,7 +219,7 @@ describe('jira resource', () => {
             });
         });
 
-        it('can handle an error response', (done) => {
+        it('handles an error response', (done) => {
             nock.cleanAll();
 
             setupSearch();
@@ -309,6 +309,31 @@ describe('jira resource', () => {
                         ref: "ATP-1"
                     }
                 });
+                done();
+            });
+        });
+
+        it('handles an error response', (done) => {
+            nock.cleanAll();
+
+            setupSearch();
+            nock(jiraUrl)
+                .post('/rest/api/2/issue/', '*')
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(400, {
+                    errorMessages:[],
+                    errors: {
+                        environment: "Environment is required.",
+                        duedate: "Due Date is required."
+                    }
+                });
+
+            out(concourseInput(), (error, result) => {
+                expect(error.message).to.equal('Could not create issue.');
+                expect(result).to.be.null;
                 done();
             });
         });
