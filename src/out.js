@@ -88,7 +88,7 @@ module.exports = (input, callback) => {
 
 function searchBySummary(source, params, callback) {
     const searchUrl = source.url + '/rest/api/2/search/';
-    const jql = 'project="' + source.project + '" AND summary~"' + params.summary + '" ORDER BY id DESC';
+    const jql = 'project="' + source.project + '" AND summary~"' + params.fields.summary + '" ORDER BY id DESC';
 
     let search = {
         jql: jql,
@@ -122,23 +122,19 @@ function updateIssue(issueId, source, params, callback) {
 
 function requestIssue(issueUrl, method, source, params, callback) {
 
-    let issue = {
-        fields: {
-            project: {
-                key: source.project
-            },
-            issuetype: {
-                name: params.issue_type
-            }
-        }
-    };
+    params.fields = _.merge(parseCustomFields(params), params.fields);
 
-    params = parseCustomFields(params);
-
-    issue.fields = _(params).omit([ 'issue_type', 'custom_fields', 'transitions' ])
+    let fields = _(params.fields)
         .mapValues(replaceTextFileString)
         .mapValues(replaceNowString)
-        .merge(issue.fields);
+        .value();
+
+    fields.project = { key: source.project };
+    fields.issuetype = { name: params.issue_type };
+
+    let issue = {
+        fields: fields
+    };
 
     debug('Sending issue: %s', JSON.stringify(issue, null, 2));
 
@@ -238,7 +234,7 @@ function replaceNowString(value) {
 
 function parseCustomFields(params) {
     if (!params.custom_fields) {
-        return params;
+        return {};
     }
 
     return _(params.custom_fields)
@@ -248,7 +244,7 @@ function parseCustomFields(params) {
         .mapValues((value) => {
             return value.value
         })
-        .merge(params);
+        .value();
 }
 
 function debugResponse(response) {

@@ -70,7 +70,7 @@ describe('jira resource', () => {
         it('handles an additional field', (done) => {
             let input = concourseInput();
 
-            input.params.environment = 'PROD';
+            input.params.fields.environment = 'PROD';
 
             let createWithEnv = setupCreate({
                     fields: {
@@ -95,7 +95,7 @@ describe('jira resource', () => {
         it('parses a $NOW', (done) => {
             let input = concourseInput();
 
-            input.params.duedate = '$NOW';
+            input.params.fields.duedate = '$NOW';
 
             let createWithDate = setupCreate((body) => {
                     let duedate = moment(body.fields.duedate);
@@ -113,9 +113,9 @@ describe('jira resource', () => {
         it('parses a $NOWs with +/-', (done) => {
             let input = concourseInput();
 
-            input.params.duedate = '$NOW+5';
-            input.params.tomorrow = '$NOW+1d';
-            input.params.abitago = '$NOW-8h'
+            input.params.fields.duedate = '$NOW+5';
+            input.params.fields.tomorrow = '$NOW+1d';
+            input.params.fields.abitago = '$NOW-8h'
 
             let createWithDate = setupCreate((body) => {
                 let duedate = moment(body.fields.duedate);
@@ -134,8 +134,8 @@ describe('jira resource', () => {
         it('parses a $NOWs with +/- and units', (done) => {
             let input = concourseInput();
 
-            input.params.tomorrow = '$NOW+1d';
-            input.params.abitago = '$NOW-8h'
+            input.params.fields.tomorrow = '$NOW+1d';
+            input.params.fields.abitago = '$NOW-8h'
 
             let createWithDate = setupCreate((body) => {
                     let tomorrow = moment(body.fields.tomorrow);
@@ -572,7 +572,7 @@ describe('jira resource', () => {
 
         it('can use a file for text', (done) => {
             let input = concourseInput();
-            input.params.description = {
+            input.params.fields.description = {
                 file: 'spec/sample.out'
             };
 
@@ -597,7 +597,7 @@ describe('jira resource', () => {
 
         it('replaces $TEXT_FILE with contents of file', (done) => {
             let input = concourseInput();
-            input.params.description = {
+            input.params.fields.description = {
                 text: "Static text - $FILE",
                 file: 'spec/sample.out'
             };
@@ -666,9 +666,11 @@ function setupCreate(expectedBody) {
 function concourseInput() {
     return {
         params: {
-            summary: "TEST 1.106.0",
-            description: "Inline static description",
-            issue_type: "Bug"
+            issue_type: "Bug",
+            fields: {
+                summary: "TEST 1.106.0",
+                description: "Inline static description"
+            }
         },
         source: {
             url: jiraUrl,
