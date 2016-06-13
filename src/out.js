@@ -213,9 +213,14 @@ function replaceTextFileString(value) {
         return value;
     }
 
-    let fileContent = value.file
-        ? fs.readFileSync(process.cwd() + value.file, 'utf-8')
-        : '';
+    let filePath = process.cwd() + '/' + value.file;
+    let fileContent;
+
+    try {
+        fileContent = fs.readFileSync(filePath, 'utf-8');
+    } catch(error) {
+        fileContent = '--Error loading file--';
+    }
 
     return value.text
         ? value.text.replace('$FILE', fileContent)
