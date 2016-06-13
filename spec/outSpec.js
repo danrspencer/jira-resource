@@ -13,7 +13,7 @@ const jiraPass = 'letmein';
 
 nock.disableNetConnect();
 
-describe('prometheus client', () => {
+describe('jira resource', () => {
 
     beforeEach(() => {
         nock.cleanAll();
