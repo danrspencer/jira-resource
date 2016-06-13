@@ -14,7 +14,7 @@ module.exports = (input, callback) => {
     const source = input.source;
     const params = input.params;
 
-    debug('Searching for issue: %s', input.params.fields.summary);
+    debug('Searching for issue: %s', input.params.summary);
 
     async.waterfall([
         (next) => {
@@ -92,7 +92,7 @@ module.exports = (input, callback) => {
 
 function searchBySummary(source, params, callback) {
     const searchUrl = source.url + '/rest/api/2/search/';
-    const jql = 'project="' + source.project + '" AND summary~"' + params.fields.summary + '" ORDER BY id DESC';
+    const jql = 'project="' + source.project + '" AND summary~"' + params.summary + '" ORDER BY id DESC';
 
     let search = {
         jql: jql,
@@ -126,13 +126,14 @@ function updateIssue(issueId, source, params, callback) {
 
 function requestIssue(issueUrl, method, source, params, callback) {
 
-    params.fields = _.merge(parseCustomFields(params), params.fields);
-
     let fields = _(params.fields)
         .mapValues(replaceTextFileString)
         .mapValues(replaceNowString)
         .value();
 
+    fields = _.merge(parseCustomFields(params), fields);
+
+    fields.summary = params.summary;
     fields.project = { key: source.project };
     fields.issuetype = { name: params.issue_type };
 

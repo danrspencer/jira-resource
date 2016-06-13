@@ -693,8 +693,8 @@ function concourseInput() {
     return {
         params: {
             issue_type: "Bug",
+            summary: "TEST 1.106.0",
             fields: {
-                summary: "TEST 1.106.0",
                 description: "Inline static description"
             }
         },
