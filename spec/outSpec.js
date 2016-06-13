@@ -249,7 +249,7 @@ describe('jira resource', () => {
                 });
 
             out(concourseInput(), (error, result) => {
-                expect(error).to.equal('Could not create issue.');
+                expect(error.message).to.equal('Could not create issue.');
                 expect(result).to.be.null;
                 done();
             });

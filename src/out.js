@@ -80,7 +80,7 @@ module.exports = (input, callback) => {
             };
             debug(JSON.stringify(output, null, 2));
         } else {
-            error = 'Could not create issue.'
+            error = new Error('Could not create issue.');
         }
 
         callback(error, output);
