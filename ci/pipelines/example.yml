@@ -7,6 +7,12 @@ jobs:
       summary: Example jira ticket
       description: Example text
       issue_type: Change
+      environment: PROD
+      duedate: $NOW+1H
+      custom_fields:
+        agcc_impact:
+          id: 10201
+          value: "none"
 
 resources:
   - name: jira-resource
