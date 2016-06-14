@@ -30,13 +30,13 @@ module.exports = (input, baseFileDir, callback) => {
         (issue, next) => {
             processTransitions(issue, source, params, next)
         }
-    ], (error, issueKey) => {
+    ], (error, issue) => {
         let output = null;
 
-        if (issueKey) {
+        if (issue) {
             output = {
                 version: {
-                    ref: issueKey
+                    ref: issue.key
                 }
             };
         } else if (!error) {

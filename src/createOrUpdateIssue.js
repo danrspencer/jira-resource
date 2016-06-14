@@ -30,9 +30,9 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
 
             debugResponse(response);
 
-            //if (response.statusCode < 200 && 300 <= response.statusCode) {
-            //    return done(new Error());
-            //}
+            if (response.statusCode < 200 || 300 <= response.statusCode) {
+                return done(new Error('Could not create issue.'));
+            }
 
             done(null, body);
         });
@@ -55,7 +55,7 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
 
             debugResponse(response);
 
-            if (response.statusCode < 200 && 300 <= response.statusCode) {
+            if (response.statusCode < 200 || 300 <= response.statusCode) {
                 return done(new Error());
             }
 

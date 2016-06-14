@@ -13,7 +13,7 @@ module.exports = (issue, source, params, callback) => {
     }
 
     if (!params.transitions) {
-        return callback(null, issue.key)
+        return callback(null, issue)
     }
 
     const transitionUrl = source.url + '/rest/api/2/issue/' + issue.id + '/transitions/';
@@ -23,7 +23,7 @@ module.exports = (issue, source, params, callback) => {
             next();
         });
     }, () => {
-        callback(null, issue.key);
+        callback(null, issue);
     });
 
     function processTransition(transitionUrl, transitionName, done) {
