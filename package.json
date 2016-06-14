@@ -1,7 +1,7 @@
 {
   "name": "jira-resource",
   "version": "1.0.0",
-  "description": "Slack notification sending resource ===================================",
+  "description": "Jira Ticket Resource",
   "main": "out.js",
   "directories": {
     "test": "test"
