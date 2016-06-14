@@ -376,7 +376,6 @@ describe('jira resource', () => {
                 .reply(200)
         });
 
-
         it('updates an issue with a transition', (done) => {
             nock(jiraUrl)
                 .get('/rest/api/2/issue/' + issueId + '/transitions/')
@@ -455,8 +454,6 @@ describe('jira resource', () => {
                     pass: jiraPass
                 })
                 .reply(204);
-
-
 
             out(input, '',  () => {
                 expect(transition.isDone()).to.be.true;
@@ -581,6 +578,47 @@ describe('jira resource', () => {
                     pass: jiraPass
                 })
                 .reply(204);
+
+            out(input, '',  () => {
+                expect(transition.isDone()).to.be.true;
+                done();
+            });
+        });
+
+        it('isn\'t case sensitive for transitions', (done) => {
+            nock(jiraUrl)
+                .get('/rest/api/2/issue/' + issueId + '/transitions/')
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(200, {
+                    "expand": "transitions",
+                    "transitions": [
+                        {
+                            "id": "51",
+                            "name": "SUBMIT"
+                        }
+                    ]
+                });
+
+            let transition = nock(jiraUrl)
+                .post('/rest/api/2/issue/' + issueId + '/transitions/', {
+                    transition: {
+                        id: "51"
+                    }
+                })
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(204);
+
+            let input = concourseInput();
+
+            input.params.transitions = [
+                'submit'
+            ];
 
             out(input, '',  () => {
                 expect(transition.isDone()).to.be.true;
