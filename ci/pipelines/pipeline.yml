@@ -23,15 +23,6 @@ jobs:
   - put: version
     params:
       bump: patch
-  - task: sync-version
-    image_resource:
-      source:
-        repository: alpine/alpine
-      type: docker-image
-    inputs:
-    - name: jira-resource
-    run:
-      path: jira-resource/ci/scripts/sync-version
   - put: docker-image-jira-resource
     params:
       build: jira-resource

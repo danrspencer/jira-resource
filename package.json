@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Jira Ticket Resource",
   "main": "out.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha ./spec/  --async-only",
     "test-watch": "node node_modules/mocha/bin/mocha ./spec/  --async-only --watch --growl",
