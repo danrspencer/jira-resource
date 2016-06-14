@@ -258,9 +258,9 @@ describe('jira resource', () => {
 
     describe('existing issue', () => {
         let update;
+        let issueId = 15805;
 
         beforeEach(() => {
-            let issueId = 15805;
 
             setupSearch([
                 {
@@ -291,7 +291,7 @@ describe('jira resource', () => {
                     user: jiraUser,
                     pass: jiraPass
                 })
-                .reply(200)
+                .reply(201)
         });
 
         it('updates the issue', (done) => {
@@ -334,6 +334,40 @@ describe('jira resource', () => {
             out(concourseInput(), '', (error, result) => {
                 expect(error.message).to.equal('Could not create issue.');
                 expect(result).to.be.null;
+                done();
+            });
+        });
+
+        it('can update an issue using just a summary', (done) => {
+            let input = {
+                params: {
+                    summary: "TEST 1.106.0"
+                },
+                source: {
+                    url: jiraUrl,
+                    username: jiraUser,
+                    password: jiraPass,
+                    project: "ATP"
+                }
+            };
+
+            update = nock(jiraUrl)
+                .put('/rest/api/2/issue/' + issueId, {
+                    fields: {
+                        summary: "TEST 1.106.0",
+                        project: {
+                            key: "ATP"
+                        }
+                    }
+                })
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(201);
+
+            out(input, '',  () => {
+                expect(update.isDone()).to.be.true;
                 done();
             });
         });

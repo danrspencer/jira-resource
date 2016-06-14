@@ -65,7 +65,7 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
 
     function requestIssue(issueUrl, method, callback) {
 
-        let fields = params.fields;
+        let fields = params.fields || {};
         fields.summary = params.summary;
 
         fields = _.merge(parseCustomFields(params), fields);
@@ -78,7 +78,10 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
             .value();
 
         fields.project = { key: source.project };
-        fields.issuetype = { name: params.issue_type };
+
+        if (params.issue_type) {
+            fields.issuetype = { name: params.issue_type };
+        }
 
         let issue = {
             fields: fields
