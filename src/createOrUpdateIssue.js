@@ -2,11 +2,11 @@
 
 const _ = require('lodash');
 const debug = require('debug')('jira-resource');
-const fs = require('fs');
 const moment = require('moment');
 const request = require('request');
 
 const debugResponse = require('./debugResponse.js');
+const replaceTextFileString = require('./replaceTextFileString.js');
 
 module.exports = (baseFileDir, existingIssue, source, params, callback) => {
 
@@ -65,14 +65,18 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
 
     function requestIssue(issueUrl, method, callback) {
 
-        let fields = _(params.fields)
-            .mapValues(replaceTextFileString)
-            .mapValues(replaceNowString)
-            .value();
+        let fields = params.fields;
+        fields.summary = params.summary;
 
         fields = _.merge(parseCustomFields(params), fields);
 
-        fields.summary = params.summary;
+        fields = _(fields)
+            .mapValues((value) => {
+                return replaceTextFileString(baseFileDir, value)
+            })
+            .mapValues(replaceNowString)
+            .value();
+
         fields.project = { key: source.project };
         fields.issuetype = { name: params.issue_type };
 
@@ -93,24 +97,7 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
         }, callback);
     }
 
-    function replaceTextFileString(value) {
-        if (typeof(value) != 'object') {
-            return value;
-        }
 
-        let filePath = baseFileDir + '/' + value.file;
-        let fileContent;
-
-        //try {
-        fileContent = fs.readFileSync(filePath, 'utf-8');
-        //} catch(error) {
-        //    fileContent = '--Error loading file--';
-        //}
-
-        return value.text
-            ? value.text.replace('$FILE', fileContent)
-            : fileContent;
-    }
 
     function replaceNowString(value) {
         return value.replace(/\$NOW([-+][0-9]+)?([ywdhms])?/, (match, change, unit) => {

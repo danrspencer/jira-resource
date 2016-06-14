@@ -22,7 +22,7 @@ module.exports = (input, baseFileDir, callback) => {
 
     async.waterfall([
         (next) => {
-            searchBySummary(source, params, next)
+            searchBySummary(baseFileDir, source, params, next)
         },
         (issue, next) => {
             createOrUpdateIssue(baseFileDir, issue, source, params, next)

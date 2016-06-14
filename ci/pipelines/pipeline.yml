@@ -48,7 +48,7 @@ resources:
       uri: git@github.com:danrspencer/jira-resource.git
       branch: master
       private_key: {{private-repo-key}}
-      ignore_paths: [ package.json ]
+      ignore_paths: package.json
 
   - name: version
     type: semver

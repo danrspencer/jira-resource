@@ -629,16 +629,13 @@ describe('jira resource', () => {
 
     describe('files', () => {
 
-
-        beforeEach(() => {
-            setupSearch();
-        });
-
         it('can use a file for text', (done) => {
             let input = concourseInput();
             input.params.fields.description = {
                 file: 'sample.out'
             };
+
+            setupSearch();
 
             let create = setupCreate({
                 fields: {
@@ -659,12 +656,18 @@ describe('jira resource', () => {
             });
         });
 
-        it('replaces $TEXT_FILE with contents of file', (done) => {
+        it('replaces $FILE with contents of file', (done) => {
             let input = concourseInput();
+            input.params.summary = {
+                text: "Summary - $FILE",
+                file: 'sample.out'
+            };
             input.params.fields.description = {
                 text: "Static text - $FILE",
                 file: 'sample.out'
             };
+
+            setupSearch([], 'Summary - Text from file');
 
             let create = setupCreate({
                 fields: {
@@ -674,7 +677,7 @@ describe('jira resource', () => {
                     issuetype: {
                         name: "Bug"
                     },
-                    summary: "TEST 1.106.0",
+                    summary: "Summary - Text from file",
                     description: "Static text - Text from file"
                 }
             });
@@ -688,12 +691,13 @@ describe('jira resource', () => {
 
 });
 
-function setupSearch(issues) {
+function setupSearch(issues, summary) {
     issues = issues || [];
+    summary = summary || 'TEST 1.106.0';
 
     return nock(jiraUrl)
         .post('/rest/api/2/search/', {
-            jql: 'project="ATP" AND summary~"TEST 1.106.0" ORDER BY id DESC',
+            jql: 'project="ATP" AND summary~"' + summary + '" ORDER BY id DESC',
             maxResults: 1,
             fields: [
                 "key",

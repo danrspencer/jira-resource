@@ -4,12 +4,14 @@ const debug = require('debug')('jira-resource');
 const request = require('request');
 
 const debugResponse = require('./debugResponse.js');
+const replaceTextFileString = require('./replaceTextFileString.js');
 
-module.exports = (source, params, callback) => {
+module.exports = (baseFileDir, source, params, callback) => {
     debug('Searching for issue: %s', params.summary);
 
     const searchUrl = source.url + '/rest/api/2/search/';
-    const jql = 'project="' + source.project + '" AND summary~"' + params.summary + '" ORDER BY id DESC';
+    const summary = replaceTextFileString(baseFileDir, params.summary);
+    const jql = 'project="' + source.project + '" AND summary~"' + summary + '" ORDER BY id DESC';
 
     let search = {
         jql: jql,
@@ -31,6 +33,11 @@ module.exports = (source, params, callback) => {
         },
         json: search
     }, (error, response, body) => {
+        if (error) {
+            console.log(error);
+            callback(error);
+        }
+
         debugResponse(response);
 
         let issue = body.issues[0];
