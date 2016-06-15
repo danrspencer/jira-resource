@@ -18,8 +18,12 @@ module.exports = (issue, source, params, callback) => {
 
     const watchersUrl = source.url + '/rest/api/2/issue/' + issue.id + '/watchers/';
 
+    debug('Adding watchers...')
+
     async.each(params.watchers,
         (watcher, next) => {
+            debug('Adding: %s', watcher);
+
             request({
                 method: 'POST',
                 uri: watchersUrl,
