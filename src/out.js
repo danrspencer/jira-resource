@@ -7,6 +7,7 @@ const fs = require('fs');
 const moment = require('moment');
 const request = require('request');
 
+const addWatchers = require('./addWatchers.js');
 const createOrUpdateIssue = require('./createOrUpdateIssue.js');
 const processTransitions = require('./processTransitions');
 const searchBySummary = require('./searchBySummary.js');
@@ -26,6 +27,9 @@ module.exports = (input, baseFileDir, callback) => {
         },
         (issue, next) => {
             createOrUpdateIssue(baseFileDir, issue, source, params, next)
+        },
+        (issue, next) => {
+            addWatchers(issue, source, params, next)
         },
         (issue, next) => {
             processTransitions(issue, source, params, next)

@@ -723,6 +723,137 @@ describe('jira resource', () => {
         });
     });
 
+    describe('watchers', () => {
+        it('adds a watcher a new issue', (done) => {
+            let input = concourseInput();
+            input.params.watchers = [ 'user1' ];
+
+            setupSearch();
+
+            setupCreate({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "TEST 1.106.0",
+                    description: "Inline static description"
+                }
+            });
+
+            let addWatcher = nock(jiraUrl)
+                .post('/rest/api/2/issue/15805/watchers/', '"user1"')
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(204);
+
+            out(input, '', () => {
+                expect(addWatcher.isDone()).to.be.true;
+                done();
+            });
+        });
+
+        it('adds a watcher an existing issue', (done) => {
+            let input = concourseInput();
+            input.params.watchers = [ 'user1' ];
+
+            let issueId = 15805;
+
+            setupSearch([
+                {
+                    expand: "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+                    id: issueId,
+                    self: "https://infinityworks.atlassian.net/rest/api/2/issue/" + issueId,
+                    key: "ATP-1",
+                    fields: {
+                        summary: "TEST 1.106.0"
+                    }
+                }
+            ]);
+
+            nock(jiraUrl)
+                .put('/rest/api/2/issue/' + issueId, {
+                    fields: {
+                        project: {
+                            key: "ATP"
+                        },
+                        issuetype: {
+                            name: "Bug"
+                        },
+                        summary: "TEST 1.106.0",
+                        description: "Inline static description"
+                    }
+                })
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(201)
+
+            let addWatcher = nock(jiraUrl)
+                .post('/rest/api/2/issue/' + issueId + '/watchers/', '"user1"')
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(204);
+
+            out(input, '', () => {
+                expect(addWatcher.isDone()).to.be.true;
+                done();
+            });
+        });
+
+        it('adds multiple watchers', (done) => {
+            let input = concourseInput();
+            input.params.watchers = [ 'user1', 'user2', 'user3' ];
+
+            setupSearch();
+
+            setupCreate({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "TEST 1.106.0",
+                    description: "Inline static description"
+                }
+            });
+
+            let addWatchers = nock(jiraUrl)
+                .post('/rest/api/2/issue/15805/watchers/', '"user1"')
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(204)
+                .post('/rest/api/2/issue/15805/watchers/', '"user2"')
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(204)
+                .post('/rest/api/2/issue/15805/watchers/', '"user3"')
+                .basicAuth({
+                    user: jiraUser,
+                    pass: jiraPass
+                })
+                .reply(204);
+
+            out(input, '', () => {
+                expect(addWatchers.isDone()).to.be.true;
+                done();
+            });
+        });
+    });
+
 });
 
 function setupSearch(issues, summary) {
