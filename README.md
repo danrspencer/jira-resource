@@ -231,7 +231,6 @@ jobs:
       - Approve
 
 resources:
-  # GIT
   - name: code-base
     type: git
     source:
