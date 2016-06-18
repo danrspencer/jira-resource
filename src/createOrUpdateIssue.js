@@ -11,30 +11,24 @@ const replaceTextFileString = require('./replaceTextFileString.js');
 module.exports = (baseFileDir, existingIssue, source, params, callback) => {
 
     if (existingIssue) {
-        return updateIssue(callback);
+        return updateIssue((error) => {
+            callback(error, existingIssue)
+        });
     }
 
-    return createIssue(callback);
+    return createIssue((error, newIssue) => {
+        callback(error, newIssue)
+    });
 
     function createIssue(done) {
         debug('Issue doesn\'t exist, creating new issue...');
 
         return requestIssue(source.url + "/rest/api/2/issue/", 'POST', (error, response, body) => {
-            //if (error) {
-            //    return done(error);
-            //}
-
-            if (!body) {
+            if (!error && !body) {
                 return done(new Error('Could not create issue.'));
             }
 
-            debugResponse(response);
-
-            if (response.statusCode < 200 || 300 <= response.statusCode) {
-                return done(new Error('Could not create issue.'));
-            }
-
-            done(null, body);
+            done(error, body);
         });
     }
 
@@ -44,47 +38,13 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
 
         debug('Issue exists [%s], updating issue...', issueKey);
 
-        return requestIssue(source.url + "/rest/api/2/issue/" + issueId, 'PUT', (error, response) => {
-            //if (error) {
-            //    return done(error);
-            //}
-
-            //if (!body) {
-            //    return done(new Error('Could not create issue.'));
-            //}
-
-            debugResponse(response);
-
-            if (response.statusCode < 200 || 300 <= response.statusCode) {
-                return done(new Error('Could not create issue.'));
-            }
-
-            done(null, existingIssue);
-        });
+        return requestIssue(source.url + "/rest/api/2/issue/" + issueId, 'PUT', done);
     }
 
     function requestIssue(issueUrl, method, callback) {
 
-        let fields = params.fields || {};
-        fields.summary = params.summary;
-
-        fields = _.merge(parseCustomFields(params), fields);
-
-        fields = _(fields)
-            .mapValues((value) => {
-                return replaceTextFileString(baseFileDir, value)
-            })
-            .mapValues(replaceNowString)
-            .value();
-
-        fields.project = { key: source.project };
-
-        if (params.issue_type) {
-            fields.issuetype = { name: params.issue_type };
-        }
-
         let issue = {
-            fields: fields
+            fields: processFields()
         };
 
         debug('Sending issue: %s', JSON.stringify(issue, null, 2));
@@ -97,10 +57,43 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
                 password: source.password
             },
             json: issue
-        }, callback);
+        }, (error, response, body) => {
+            if (error) {
+                return callback(error);
+            }
+
+            debugResponse(response);
+
+            if (response.statusCode < 200 || 300 <= response.statusCode) {
+                return callback(new Error('Could not update Jira.'));
+            }
+
+            callback(error, response, body);
+        });
     }
 
+    function processFields() {
+        let fields = params.fields || {};
 
+        fields.summary = params.summary;
+
+        fields = _.merge(parseCustomFields(params), fields);
+
+        fields = _(fields)
+            .mapValues((value) => {
+                return replaceTextFileString(baseFileDir, value)
+            })
+            .mapValues(replaceNowString)
+            .value();
+
+        fields.project = {key: source.project};
+
+        if (params.issue_type) {
+            fields.issuetype = {name: params.issue_type};
+        }
+
+        return fields;
+    }
 
     function replaceNowString(value) {
         return value.replace(/\$NOW([-+][0-9]+)?([ywdhms])?/, (match, change, unit) => {

@@ -197,7 +197,18 @@ describe('create or update issue', () => {
             let input = concourseInput();
 
             nock(jira.url)
-                .post('/rest/api/2/issue/', '*')
+                .post('/rest/api/2/issue/', {
+                    fields: {
+                        project: {
+                            key: "ATP"
+                        },
+                        issuetype: {
+                            name: "Bug"
+                        },
+                        summary: "TEST 1.106.0",
+                        description: "Inline static description"
+                    }
+                })
                 .basicAuth({
                     user: jira.user,
                     pass: jira.pass
@@ -211,7 +222,20 @@ describe('create or update issue', () => {
                 });
 
             createOrUpdateIssue('', null, input.source, input.params, (error, result) => {
-                expect(error.message).to.equal('Could not create issue.');
+                expect(error.message).to.equal('Could not update Jira.');
+                expect(result).to.be.undefined;
+                done();
+            });
+        });
+
+        it('handles an error in the request', (done) => {
+            nock.cleanAll();
+
+            let input = concourseInput();
+
+            createOrUpdateIssue('', null, input.source, input.params, (error, result) => {
+                expect(error).to.not.be.null;
+                expect(error.message).to.not.equal('Could not update Jira.');
                 expect(result).to.be.undefined;
                 done();
             });
@@ -312,8 +336,19 @@ describe('create or update issue', () => {
                 });
 
             createOrUpdateIssue('', issue, input.source, input.params, (error, result) => {
-                expect(error.message).to.equal('Could not create issue.');
-                expect(result).to.be.undefined;
+                expect(error.message).to.equal('Could not update Jira.');
+                done();
+            });
+        });
+
+        it('handles an error in the request', (done) => {
+            nock.cleanAll();
+
+            let input = concourseInput();
+
+            createOrUpdateIssue('', issue, input.source, input.params, (error, result) => {
+                expect(error).to.not.be.null;
+                expect(error.message).to.not.equal('Could not update Jira.');
                 done();
             });
         });

@@ -3,6 +3,8 @@
 const debug = require('debug')('jira-resource');
 
 module.exports = (response) => {
+    if (!response) return;
+
     debug(
         'Response: (%s) %s',
         response.statusCode,
