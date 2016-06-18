@@ -69,7 +69,6 @@ If a date field needs to be populated with a date relative to current time `$NOW
  
 e.g.
 ```
-
 $NOW
 # One hour ahead
 $NOW+1h
