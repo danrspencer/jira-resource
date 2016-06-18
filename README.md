@@ -231,29 +231,29 @@ jobs:
       - Approve
 
 resources:
-  - name: code-base
-    type: git
-    source:
-      uri: git@github.com:danrspencer/jira-resource.git
-      branch: master
-      private_key: {{private-repo-key}}
+- name: code-base
+  type: git
+  source:
+    uri: git@github.com:danrspencer/jira-resource.git
+    branch: master
+    private_key: {{private-repo-key}}
       
-  - name: version
-    type: semver
-    source:
-      driver: git
-      uri: git@github.com:danrspencer/jira-resource.git
-      branch: version
-      private_key: {{private-repo-key}}
-      file: version
+- name: version
+  type: semver
+  source:
+    driver: git
+    uri: git@github.com:danrspencer/jira-resource.git
+    branch: version
+    private_key: {{private-repo-key}}
+    file: version
       
-  - name: jira
-    type: jira-resource
-    source:
-      url: https://infinityworks.atlassian.net
-      username: {{jira-username}}
-      password: {{jira-password}}
-      project: S6SERVICE
+- name: jira
+  type: jira-resource
+  source:
+    url: https://infinityworks.atlassian.net
+    username: {{jira-username}}
+    password: {{jira-password}}
+    project: JR
 
 resource_types:
 - name: jira-resource
