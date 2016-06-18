@@ -77,16 +77,13 @@ $NOW+1h
 $NOW-1d
 ```
 
-*KEY*
-*years	y
-*weeks	w
-*days	d
-*hours	h
-*minutes	m
-*seconds	s
-
-
-
+_KEY_
+* `years	y`
+* `weeks	w`
+* `days	d`
+* `hours	h`
+* `minutes	m`
+* `seconds	s`
 
 #### Parameters
 
