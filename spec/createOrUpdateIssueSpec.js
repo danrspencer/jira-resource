@@ -41,6 +41,33 @@ describe('create or update issue', () => {
             });
         });
 
+        it('returns the new issue', (done) => {
+            let input = concourseInput();
+
+            setupCreate({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "TEST 1.106.0",
+                    description: "Inline static description"
+                }
+            });
+
+            createOrUpdateIssue('', null, input.source, input.params, (error, result) => {
+                expect(error).to.be.null;
+                expect(result).to.deep.equal({
+                    "id": "15805",
+                    "key": "ATP-1",
+                    "self": "http://jira.comrest/api/2/issue/15805"
+                });
+                done();
+            });
+        });
+
         it('handles an additional field', (done) => {
             let input = concourseInput();
 
@@ -383,6 +410,78 @@ describe('create or update issue', () => {
 
             createOrUpdateIssue('', issue, input.source, input.params, () => {
                 expect(updateWithOnlySummary.isDone()).to.be.true;
+                done();
+            });
+        });
+    });
+
+    describe('files', () => {
+
+        let dir = process.cwd() + '/spec';
+
+        it('can use a file for text', (done) => {
+            let input = concourseInput();
+            input.params.fields.description = {
+                file: 'resources/sample.out'
+            };
+
+            let create = setupCreate({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "TEST 1.106.0",
+                    description: "Text from file"
+                }
+            });
+
+            createOrUpdateIssue(dir, null, input.source, input.params, () => {
+                expect(create.isDone()).to.be.true;
+                done();
+            });
+        });
+
+        it('replaces $FILE with contents of file', (done) => {
+            let issueId = 15805;
+
+            let issue = {
+                expand: "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+                id: issueId,
+                self: jira.url + "/rest/api/2/issue/" + issueId,
+                key: "ATP-1",
+                fields: {
+                    summary: "TEST 1.106.0"
+                }
+            };
+
+            let input = concourseInput();
+            input.params.summary = {
+                text: "Summary - $FILE",
+                file: 'resources/sample.out'
+            };
+            input.params.fields.description = {
+                text: "Static text - $FILE",
+                file: 'resources/sample.out'
+            };
+
+            let create = setupCreate({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "Summary - Text from file",
+                    description: "Static text - Text from file"
+                }
+            });
+
+            createOrUpdateIssue(dir, null, input.source, input.params, () => {
+                expect(create.isDone()).to.be.true;
                 done();
             });
         });
