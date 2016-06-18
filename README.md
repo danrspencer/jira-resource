@@ -16,18 +16,6 @@ Quick Example
         description: With some text
 ```
 
-Resource Type Configuration
----------------------------
-
-```yaml
-resource_types:
-- name: jira-resource
-  type: docker-image
-  source:
-    repository: danrspencer/jira-resource
-    tag: latest
-```
-
 Source Configuration
 --------------------
 
@@ -40,6 +28,18 @@ resources:
     username: xxxxx
     password: xxxxx
     project: APROJECT
+```
+
+Resource Type Configuration
+---------------------------
+
+```yaml
+resource_types:
+- name: jira-resource
+  type: docker-image
+  source:
+    repository: danrspencer/jira-resource
+    tag: latest
 ```
 
 Behavior
