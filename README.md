@@ -6,7 +6,6 @@ Quick Example
 ```yaml
 - name: update-jira
   plan:
-  - get: jira-resource
   - put: jira
     params:
       issue_type: Change
