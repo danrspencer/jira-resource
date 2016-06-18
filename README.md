@@ -1,6 +1,8 @@
 Jira Ticket Resource
 ===================================
 
+Create and update Jira tickets via Concourse
+
 Quick Example
 -------------
 ```yaml
