@@ -44,7 +44,7 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
 
         debug('Issue exists [%s], updating issue...', issueKey);
 
-        return requestIssue(source.url + "/rest/api/2/issue/" + issueId, 'PUT', (error, response, body) => {
+        return requestIssue(source.url + "/rest/api/2/issue/" + issueId, 'PUT', (error, response) => {
             //if (error) {
             //    return done(error);
             //}
@@ -56,7 +56,7 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
             debugResponse(response);
 
             if (response.statusCode < 200 || 300 <= response.statusCode) {
-                return done(new Error());
+                return done(new Error('Could not create issue.'));
             }
 
             done(null, existingIssue);

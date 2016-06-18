@@ -248,7 +248,7 @@ resources:
 - name: jira
   type: jira-resource
   source:
-    url: https://infinityworks.atlassian.net
+    url: https://jira.atlassian.net
     username: {{jira-username}}
     password: {{jira-password}}
     project: JR

@@ -34,7 +34,6 @@ module.exports = (baseFileDir, source, params, callback) => {
         json: search
     }, (error, response, body) => {
         if (error) {
-            console.log(error);
             callback(error);
         }
 
