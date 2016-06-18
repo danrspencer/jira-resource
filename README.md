@@ -1,9 +1,8 @@
 Jira Ticket Resource
 ===================================
 
-Resource Type Configuration
----------------------------
-
+Quick Example
+-------------
 ```yaml
 - name: update-jira
   plan:
@@ -14,6 +13,18 @@ Resource Type Configuration
       summary: Build v1.0.1
       fields:
         description: With some text
+```
+
+Resource Type Configuration
+---------------------------
+
+```yaml
+resource_types:
+- name: jira-resource
+  type: docker-image
+  source:
+    repository: danrspencer/jira-resource
+    tag: latest
 ```
 
 Source Configuration
@@ -28,14 +39,6 @@ resources:
     username: xxxxx
     password: xxxxx
     project: APROJECT
-      
-
-resource_types:
-- name: jira-resource
-  type: docker-image
-  source:
-    repository: danrspencer/jira-resource
-    tag: latest
 ```
 
 Behavior
