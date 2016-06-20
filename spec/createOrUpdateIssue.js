@@ -1,3 +1,5 @@
+'use strict'
+
 const chai = require('chai');
 const expect = chai.expect;
 
@@ -393,7 +395,7 @@ describe('create or update issue', () => {
                 }
             };
 
-            updateWithOnlySummary = nock(jira.url)
+            let updateWithOnlySummary = nock(jira.url)
                 .put('/rest/api/2/issue/' + issueId, {
                     fields: {
                         summary: "TEST 1.106.0",
