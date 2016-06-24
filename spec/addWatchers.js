@@ -3,7 +3,6 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const moment = require('moment');
 const nock = require('nock');
 
 const addWatchers = require('../src/addWatchers.js');

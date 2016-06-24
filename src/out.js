@@ -1,19 +1,12 @@
 'use strict'
 
-const _ = require('lodash');
 const async = require('async');
 const debug = require('debug')('jira-resource');
-const fs = require('fs');
-const moment = require('moment');
-const request = require('request');
 
 const addWatchers = require('./addWatchers.js');
 const createOrUpdateIssue = require('./createOrUpdateIssue.js');
 const processTransitions = require('./processTransitions');
 const searchBySummary = require('./searchBySummary.js');
-
-/** Uncomment the below for sexy debug shizzles **/
-//require('request-debug')(request);
 
 module.exports = (input, baseFileDir, callback) => {
     const source = input.source;

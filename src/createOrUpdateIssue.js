@@ -96,6 +96,8 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
     }
 
     function replaceNowString(value) {
+        value = String(value);
+
         return value.replace(/\$NOW([-+][0-9]+)?([ywdhms])?/, (match, change, unit) => {
             let date = moment();
 

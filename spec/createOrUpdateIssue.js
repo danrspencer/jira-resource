@@ -269,6 +269,30 @@ describe('create or update issue', () => {
                 done();
             });
         });
+
+        it('handles an integer value', (done) => {
+            let input = concourseInput();
+            input.params.fields.build_number = 12345;
+
+            let create = setupCreate({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "TEST 1.106.0",
+                    description: "Inline static description",
+                    build_number: "12345"
+                }
+            });
+
+            createOrUpdateIssue('', null, input.source, input.params, () => {
+                expect(create.isDone()).to.be.true;
+                done();
+            });
+        });
     });
 
     describe('update', () => {
