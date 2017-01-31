@@ -3,7 +3,10 @@ npm-debug.log
 
 real.json
 
+.idea
 .vagrant
+
+*.swp
 
 fly
 config.yml
