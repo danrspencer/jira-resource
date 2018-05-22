@@ -2,4 +2,4 @@
 
 VERSION=$(cat version/version)
 
-sed -i '' "s#\"version\": \"[0-9.]*\"#\"version\": \"$VERSION\"#g" jira-resource/package.json
+sed -i '' "s#\"version\": \"[0-9.]*\"#\"version\": \"$VERSION\"#g" git-jira-resource/package.json

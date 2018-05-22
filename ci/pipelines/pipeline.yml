@@ -1,31 +1,59 @@
+---
+
+resources:
+  - name: git-jira-resource
+    type: git
+    source:
+      uri: git@github.com:((git-username))/jira-resource.git
+      branch: master
+      private_key: ((private-repo-key))
+      ignore_paths: [ package.json ]
+
+  - name: version
+    type: semver
+    source:
+      driver: git
+      uri: git@github.com:((git-username))/jira-resource.git
+      branch: version
+      private_key: ((private-repo-key))
+      file: version
+
+  - name: docker-jira-resource
+    type: docker-image
+    source:
+      repository: ((docker-username))/jira-resource
+      username: ((docker-username))
+      password: ((docker-password))
+      email: ((docker-email))
+
 jobs:
 - name: test
   plan:
-  - get: jira-resource
+  - get: git-jira-resource
     trigger: true
   - task: run-tests
     config:
       platform: linux
       image_resource:
         source:
-          repository: danrspencer/jira-resource
+          repository: ((docker-username))/jira-resource
         type: docker-image
       inputs:
-      - name: jira-resource
+      - name: git-jira-resource
       run:
-        path: jira-resource/ci/scripts/run-tests
+        path: git-jira-resource/ci/scripts/run-tests
 
 - name: build
   plan:
-  - get: jira-resource
+  - get: git-jira-resource
     trigger: true
     passed: [ test ]
   - put: version
     params:
       bump: patch
-  - put: docker-image-jira-resource
+  - put: docker-jira-resource
     params:
-      build: jira-resource
+      build: git-jira-resource
       tag: version/version
       tag_as_latest: true
 
@@ -40,29 +68,3 @@ jobs:
   - put: version
     params:
       bump: minor
-
-resources:
-  - name: jira-resource
-    type: git
-    source:
-      uri: git@github.com:danrspencer/jira-resource.git
-      branch: master
-      private_key: {{private-repo-key}}
-      ignore_paths: [ package.json ]
-
-  - name: version
-    type: semver
-    source:
-      driver: git
-      uri: git@github.com:danrspencer/jira-resource.git
-      branch: version
-      private_key: {{private-repo-key}}
-      file: version
-
-  - name: docker-image-jira-resource
-    type: docker-image
-    source:
-      repository: danrspencer/jira-resource
-      username: danrspencer
-      password: boccie.tapestry.conjoint.communal.binary
-      email: danrspen@gmail.com
