@@ -72,4 +72,3 @@ module.exports = (issue, source, params, callback) => {
         ], done);
     }
 }
-

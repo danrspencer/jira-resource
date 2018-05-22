@@ -43,4 +43,3 @@ module.exports = (input, baseFileDir, callback) => {
         callback(error, output);
     });
 };
-
