@@ -48,12 +48,12 @@ describe('jira resource', () => {
 
     it('can update a ticket', (done) => {
         setupSearch({
-            expand: "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+            expand: 'operations,versionedRepresentations,editmeta,changelog,renderedFields',
             id: issueId,
-            self: jira.url + "/rest/api/2/issue/" + issueId,
-            key: "ATP-1",
+            self: jira.url + '/rest/api/2/issue/' + issueId,
+            key: 'ATP-1',
             fields: {
-                summary: "TEST 1.106.0"
+                summary: 'TEST 1.106.0'
             }
         });
 
@@ -126,8 +126,8 @@ describe('jira resource', () => {
                 jql: 'project="ATP" AND summary~"' + summary + '" ORDER BY id DESC',
                 maxResults: 1,
                 fields: [
-                    "key",
-                    "summary"
+                    'key',
+                    'summary'
                 ]
             })
             .basicAuth({
@@ -135,7 +135,7 @@ describe('jira resource', () => {
                 pass: jira.pass
             })
             .reply(200, {
-                expand: "names,schema",
+                expand: 'names,schema',
                 startAt: 0,
                 maxResults: 1,
                 total: issues.length,
@@ -156,7 +156,7 @@ describe('jira resource', () => {
                     summary: summary,
                     description: 'Sample description [Text from file]',
                     environment: 'Prod',
-                    customfield_10201: 12345,
+                    customfield_10201: '12345',
                     customfield_76552: 'something'
                 }
             })
@@ -167,7 +167,7 @@ describe('jira resource', () => {
             .reply(200, {
                 id: issueId,
                 key: 'ATP-51',
-                self: jira.url + 'rest/api/2/issue/' + issueId
+                self: jira.url + '/rest/api/2/issue/' + issueId
             });
     }
 
@@ -184,7 +184,7 @@ describe('jira resource', () => {
                     summary: summary,
                     description: 'Sample description [Text from file]',
                     environment: 'Prod',
-                    customfield_10201: 12345,
+                    customfield_10201: '12345',
                     customfield_76552: 'something'
                 }
             })
@@ -219,11 +219,11 @@ describe('jira resource', () => {
                 pass: jira.pass
             })
             .reply(200, {
-                "expand": "transitions",
-                "transitions": [
+                'expand': 'transitions',
+                'transitions': [
                     {
-                        "id": "321",
-                        "name": "Review"
+                        'id': '321',
+                        'name': 'Review'
                     }
                 ]
             })
@@ -233,15 +233,15 @@ describe('jira resource', () => {
                 pass: jira.pass
             })
             .reply(200, {
-                "expand": "transitions",
-                "transitions": [
+                'expand': 'transitions',
+                'transitions': [
                     {
-                        "id": "456",
-                        "name": "Done"
+                        'id': '456',
+                        'name': 'Done'
                     },
                     {
-                        "id": "789",
-                        "name": "Reject"
+                        'id': '789',
+                        'name': 'Reject'
                     }
                 ]
             });
@@ -270,4 +270,3 @@ describe('jira resource', () => {
     }
 
 });
-
