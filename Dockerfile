@@ -1,5 +1,10 @@
 FROM alpine:3.7
 
+LABEL maintainer="Dan Spencer" \
+	authors="Dan Spencer, André Lademann" \
+	version="0.0.4" \
+	description="Jira ticket resource for concourse ci."
+
 RUN apk add --no-cache \
     bash \
     nodejs
