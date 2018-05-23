@@ -2,6 +2,9 @@ Jira Ticket Resource
 ===================================
 
 [![Build Status](https://travis-ci.org/vergissberlin/jira-resource.svg?branch=master)](https://travis-ci.org/vergissberlin/jira-resource)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/?branch=master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f2ff0bbe8ec746b7af07d3bb088e0787)](https://www.codacy.com/app/andre_1725/jira-resource?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vergissberlin/jira-resource&amp;utm_campaign=Badge_Grade)
 
 Create and update Jira tickets via Concourse
 
