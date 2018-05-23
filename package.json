@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha ./spec/  --async-only",
     "test-watch": "node node_modules/mocha/bin/mocha ./spec/  --async-only --watch --growl",
-    "test-watch-debug": "DEBUG=jira-resource node node_modules/mocha/bin/mocha ./spec/  --async-only --watch --growl"
+    "test-watch-debug": "DEBUG=jira-resource node node_modules/mocha/bin/mocha ./spec/  --async-only --watch --growl",
+    "test-covarage": "istanbul cover --report clover src/*.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   "homepage": "https://github.com/danrspencer/jira-resource#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "nock": "^9.2.6",
     "request-debug": "^0.2.0"

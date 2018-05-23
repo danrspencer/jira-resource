@@ -1,0 +1,12 @@
+build:
+    dependencies:
+        before:
+            - npm install istanbul
+
+    tests:
+        override:
+            -
+                command: 'istanbul cover --report clover src/*.js'
+                coverage:
+                    file: 'coverage/clover.xml'
+                    format: 'clover'
