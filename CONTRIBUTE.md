@@ -15,7 +15,7 @@
 
 ### Concourse resource
 
-1. Install all dependencies `npm install`
+1. Install all dependencies `npm install` and `sudo gem install terminal-notifier` (for OSX notifications)
 2. Run the tests `npm test`
 3. Run the tests with a change watcher `npm run test-watch`
 4. Run the tests with a change watcher and debugger `npm run test-watch-debug`
@@ -28,6 +28,4 @@
 
 ## Custom build
 
-```
-bash ./build.sh
-```
+1. docker build --no-cache -t danrspencer/jira-resource .

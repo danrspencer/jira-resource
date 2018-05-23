@@ -1,5 +1,5 @@
 module.exports = {
-    url: 'http://jira.com',
+    url:  'http://jira.com',
     user: 'dave',
     pass: 'letmein'
-};
+}

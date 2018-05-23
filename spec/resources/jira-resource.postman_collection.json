@@ -1,541 +1,541 @@
 {
-	"info": {
-		"name": "jira-resource",
-		"_postman_id": "1bfeadff-bda3-b286-9b86-fb8e9e6887b1",
-		"description": "JIRA REST API examples\nThis guide contains different examples of how to use the JIRA REST API, including how to query issues, create an issue, edit an issue, etc. The reference documentation for the JIRA Server platform REST API is here:  JIRA Server platform REST API. If you’ve never used the JIRA REST APIs before, we recommend that you also read the overview: About the JIRA REST APIs.\n\nThe examples on this page use curl. If an input file is required, it is denoted by the --data @filename syntax and the file data is shown separately.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "Create task",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "{{user}}",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "{{pass}}",
-							"type": "string"
-						},
-						{
-							"key": "saveHelperData",
-							"value": true,
-							"type": "boolean"
-						},
-						{
-							"key": "showPassword",
-							"value": false,
-							"type": "boolean"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YW5kcmUubGFkZW1hbm46QWhhc2l0YWcxMw=="
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"fields\": {\n       \"project\":\n       { \n          \"key\": \"{{project}}\"\n       },\n       \"summary\": \"REST ye merry gentlemen.\",\n       \"description\": \"Creating of an issue using project keys and issue type names using the REST API\",\n       \"issuetype\": {\n          \"name\": \"Task\"\n       }\n   }\n}"
-				},
-				"url": {
-					"raw": "{{url}}/rest/api/2/issue/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"rest",
-						"api",
-						"2",
-						"issue",
-						""
-					]
-				},
-				"description": "Creating an issue using the JIRA REST API is as simple as making a POST with a JSON document. To create an issue, you will need to know certain key metadata, like the ID of the project that the issue will be created in, or the ID of the issue type. You can request the create metadata for all issue types across all projects by using the createmeta resource. For example:"
-			},
-			"response": []
-		},
-		{
-			"name": "Create sub task",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "{{user}}",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "{{pass}}",
-							"type": "string"
-						},
-						{
-							"key": "saveHelperData",
-							"value": true,
-							"type": "boolean"
-						},
-						{
-							"key": "showPassword",
-							"value": false,
-							"type": "boolean"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YW5kcmUubGFkZW1hbm46QWhhc2l0YWcxMw=="
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"fields\": {\n       \"project\":\n       { \n          \"key\": \"{{project}}\"\n       },\n       \"parent\":\n       { \n          \"key\": \"{{issue}}\"\n       },\n       \"summary\": \"Another subtask.\",\n       \"description\": \"Creating of an issue using project keys and issue type names using the REST API\",\n       \"issuetype\": {\n          \"name\": \"Sub: Task\"\n       }\n   }\n}"
-				},
-				"url": {
-					"raw": "{{url}}/rest/api/2/issue/",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"rest",
-						"api",
-						"2",
-						"issue",
-						""
-					]
-				},
-				"description": "Creating an issue using the JIRA REST API is as simple as making a POST with a JSON document. To create an issue, you will need to know certain key metadata, like the ID of the project that the issue will be created in, or the ID of the issue type. You can request the create metadata for all issue types across all projects by using the createmeta resource. For example:"
-			},
-			"response": []
-		},
-		{
-			"name": "Adding comment",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "{{user}}",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "{{pass}}",
-							"type": "string"
-						},
-						{
-							"key": "saveHelperData",
-							"value": true,
-							"type": "boolean"
-						},
-						{
-							"key": "showPassword",
-							"value": false,
-							"type": "boolean"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"body\":  \"h2. Example comment\\nLi Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.\"\n}"
-				},
-				"url": {
-					"raw": "{{url}}/rest/api/2/issue/{{issue}}/comment",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"rest",
-						"api",
-						"2",
-						"issue",
-						"{{issue}}",
-						"comment"
-					]
-				},
-				"description": ""
-			},
-			"response": [
-				{
-					"id": "edc41f8a-99ac-47a7-a6a0-d4db00f36093",
-					"name": "Adding comment",
-					"originalRequest": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"name": "Authorization",
-								"value": "Basic YW5kcmUubGFkZW1hbm46QWhhc2l0YWcxMw=="
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"body\":  \"h2. Example comment\\nLi Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.\"\n}"
-						},
-						"url": {
-							"raw": "{{url}}/rest/api/2/issue/{{issue}}/comment",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"rest",
-								"api",
-								"2",
-								"issue",
-								"{{issue}}",
-								"comment"
-							]
-						}
-					},
-					"status": "Created",
-					"code": 201,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"name": "cache-control",
-							"key": "cache-control",
-							"value": "no-cache, no-store, no-transform",
-							"description": ""
-						},
-						{
-							"name": "connection",
-							"key": "connection",
-							"value": "Keep-Alive",
-							"description": ""
-						},
-						{
-							"name": "content-encoding",
-							"key": "content-encoding",
-							"value": "gzip",
-							"description": ""
-						},
-						{
-							"name": "content-security-policy",
-							"key": "content-security-policy",
-							"value": "frame-ancestors 'self'",
-							"description": ""
-						},
-						{
-							"name": "content-type",
-							"key": "content-type",
-							"value": "application/json;charset=UTF-8",
-							"description": ""
-						},
-						{
-							"name": "date",
-							"key": "date",
-							"value": "Tue, 22 May 2018 16:59:12 GMT",
-							"description": ""
-						},
-						{
-							"name": "keep-alive",
-							"key": "keep-alive",
-							"value": "timeout=5, max=100",
-							"description": ""
-						},
-						{
-							"name": "location",
-							"key": "location",
-							"value": "https://jira.netresearch.de/rest/api/2/issue/81370/comment/298321",
-							"description": ""
-						},
-						{
-							"name": "transfer-encoding",
-							"key": "transfer-encoding",
-							"value": "chunked",
-							"description": ""
-						},
-						{
-							"name": "vary",
-							"key": "vary",
-							"value": "User-Agent",
-							"description": ""
-						},
-						{
-							"name": "x-arequestid",
-							"key": "x-arequestid",
-							"value": "1139x315518x1",
-							"description": ""
-						},
-						{
-							"name": "x-asen",
-							"key": "x-asen",
-							"value": "SEN-10752348",
-							"description": ""
-						},
-						{
-							"name": "x-asessionid",
-							"key": "x-asessionid",
-							"value": "1kzqi5l",
-							"description": ""
-						},
-						{
-							"name": "x-ausername",
-							"key": "x-ausername",
-							"value": "andre.lademann",
-							"description": ""
-						},
-						{
-							"name": "x-content-type-options",
-							"key": "x-content-type-options",
-							"value": "nosniff",
-							"description": ""
-						},
-						{
-							"name": "x-frame-options",
-							"key": "x-frame-options",
-							"value": "SAMEORIGIN",
-							"description": ""
-						},
-						{
-							"name": "x-seraph-loginreason",
-							"key": "x-seraph-loginreason",
-							"value": "OK",
-							"description": ""
-						},
-						{
-							"name": "x-xss-protection",
-							"key": "x-xss-protection",
-							"value": "1; mode=block",
-							"description": ""
-						}
-					],
-					"cookie": [],
-					"responseTime": "273",
-					"body": "{\"self\":\"https://jira.netresearch.de/rest/api/2/issue/81370/comment/298321\",\"id\":\"298321\",\"author\":{\"self\":\"https://jira.netresearch.de/rest/api/2/user?username=andre.lademann\",\"name\":\"andre.lademann\",\"key\":\"andre.lademann\",\"emailAddress\":\"andre.lademann@netresearch.de\",\"avatarUrls\":{\"48x48\":\"https://jira.netresearch.de/secure/useravatar?ownerId=andre.lademann&avatarId=15442\",\"24x24\":\"https://jira.netresearch.de/secure/useravatar?size=small&ownerId=andre.lademann&avatarId=15442\",\"16x16\":\"https://jira.netresearch.de/secure/useravatar?size=xsmall&ownerId=andre.lademann&avatarId=15442\",\"32x32\":\"https://jira.netresearch.de/secure/useravatar?size=medium&ownerId=andre.lademann&avatarId=15442\"},\"displayName\":\"André Lademann\",\"active\":true,\"timeZone\":\"Europe/Berlin\"},\"body\":\"h2. Example comment\\nLi Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.\",\"updateAuthor\":{\"self\":\"https://jira.netresearch.de/rest/api/2/user?username=andre.lademann\",\"name\":\"andre.lademann\",\"key\":\"andre.lademann\",\"emailAddress\":\"andre.lademann@netresearch.de\",\"avatarUrls\":{\"48x48\":\"https://jira.netresearch.de/secure/useravatar?ownerId=andre.lademann&avatarId=15442\",\"24x24\":\"https://jira.netresearch.de/secure/useravatar?size=small&ownerId=andre.lademann&avatarId=15442\",\"16x16\":\"https://jira.netresearch.de/secure/useravatar?size=xsmall&ownerId=andre.lademann&avatarId=15442\",\"32x32\":\"https://jira.netresearch.de/secure/useravatar?size=medium&ownerId=andre.lademann&avatarId=15442\"},\"displayName\":\"André Lademann\",\"active\":true,\"timeZone\":\"Europe/Berlin\"},\"created\":\"2018-05-22T18:59:12.397+0200\",\"updated\":\"2018-05-22T18:59:12.397+0200\"}"
-				}
-			]
-		},
-		{
-			"name": "Adding attachment",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "{{user}}",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "{{pass}}",
-							"type": "string"
-						},
-						{
-							"key": "saveHelperData",
-							"value": true,
-							"type": "boolean"
-						},
-						{
-							"key": "showPassword",
-							"value": false,
-							"type": "boolean"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "multipart/form-data"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "X-Atlassian-Token",
-							"value": "nocheck",
-							"type": "text",
-							"description": ""
-						},
-						{
-							"key": "file",
-							"description": "",
-							"type": "file",
-							"src": "10311257_1160192464013529_1503935111_n.jpg"
-						}
-					]
-				},
-				"url": {
-					"raw": "{{url}}/rest/api/2/issue/{{issue}}/attachments",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"rest",
-						"api",
-						"2",
-						"issue",
-						"{{issue}}",
-						"attachments"
-					]
-				},
-				"description": "Creating an issue using the JIRA REST API is as simple as making a POST with a JSON document. To create an issue, you will need to know certain key metadata, like the ID of the project that the issue will be created in, or the ID of the issue type. You can request the create metadata for all issue types across all projects by using the createmeta resource. For example:"
-			},
-			"response": []
-		},
-		{
-			"name": "Get meta data",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "{{user}}",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "{{pass}}",
-							"type": "string"
-						},
-						{
-							"key": "saveHelperData",
-							"value": true,
-							"type": "boolean"
-						},
-						{
-							"key": "showPassword",
-							"value": false,
-							"type": "boolean"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YW5kcmUubGFkZW1hbm46QWhhc2l0YWcxMw=="
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"body\":  \"h2. Example comment\\nLi Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.\"\n}"
-				},
-				"url": {
-					"raw": "{{url}}/rest/api/2/issue/createmeta",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"rest",
-						"api",
-						"2",
-						"issue",
-						"createmeta"
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "Search",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "{{user}}",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "{{pass}}",
-							"type": "string"
-						},
-						{
-							"key": "saveHelperData",
-							"value": true,
-							"type": "boolean"
-						},
-						{
-							"key": "showPassword",
-							"value": false,
-							"type": "boolean"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
-					{
-						"key": "Authorization",
-						"value": "Basic YW5kcmUubGFkZW1hbm46QWhhc2l0YWcxMw=="
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"body\":  \"h2. Example comment\\nLi Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.\"\n}"
-				},
-				"url": {
-					"raw": "{{url}}/rest/api/2/search?jql=assignee={{user}}",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"rest",
-						"api",
-						"2",
-						"search"
-					],
-					"query": [
-						{
-							"key": "jql",
-							"value": "assignee={{user}}",
-							"equals": true
-						}
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		}
-	]
+    "info": {
+        "name": "jira-resource",
+        "_postman_id": "1bfeadff-bda3-b286-9b86-fb8e9e6887b1",
+        "description": "JIRA REST API examples\nThis guide contains different examples of how to use the JIRA REST API, including how to query issues, create an issue, edit an issue, etc. The reference documentation for the JIRA Server platform REST API is here:  JIRA Server platform REST API. If you’ve never used the JIRA REST APIs before, we recommend that you also read the overview: About the JIRA REST APIs.\n\nThe examples on this page use curl. If an input file is required, it is denoted by the --data @filename syntax and the file data is shown separately.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Create task",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": [
+                        {
+                            "key": "username",
+                            "value": "{{user}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "password",
+                            "value": "{{pass}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "saveHelperData",
+                            "value": true,
+                            "type": "boolean"
+                        },
+                        {
+                            "key": "showPassword",
+                            "value": false,
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YW5kcmUubGFkZW1hbm46QWhhc2l0YWcxMw=="
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"fields\": {\n       \"project\":\n       { \n          \"key\": \"{{project}}\"\n       },\n       \"summary\": \"REST ye merry gentlemen.\",\n       \"description\": \"Creating of an issue using project keys and issue type names using the REST API\",\n       \"issuetype\": {\n          \"name\": \"Task\"\n       }\n   }\n}"
+                },
+                "url": {
+                    "raw": "{{url}}/rest/api/2/issue/",
+                    "host": [
+                        "{{url}}"
+                    ],
+                    "path": [
+                        "rest",
+                        "api",
+                        "2",
+                        "issue",
+                        ""
+                    ]
+                },
+                "description": "Creating an issue using the JIRA REST API is as simple as making a POST with a JSON document. To create an issue, you will need to know certain key metadata, like the ID of the project that the issue will be created in, or the ID of the issue type. You can request the create metadata for all issue types across all projects by using the createmeta resource. For example:"
+            },
+            "response": []
+        },
+        {
+            "name": "Create sub task",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": [
+                        {
+                            "key": "username",
+                            "value": "{{user}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "password",
+                            "value": "{{pass}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "saveHelperData",
+                            "value": true,
+                            "type": "boolean"
+                        },
+                        {
+                            "key": "showPassword",
+                            "value": false,
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YW5kcmUubGFkZW1hbm46QWhhc2l0YWcxMw=="
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"fields\": {\n       \"project\":\n       { \n          \"key\": \"{{project}}\"\n       },\n       \"parent\":\n       { \n          \"key\": \"{{issue}}\"\n       },\n       \"summary\": \"Another subtask.\",\n       \"description\": \"Creating of an issue using project keys and issue type names using the REST API\",\n       \"issuetype\": {\n          \"name\": \"Sub: Task\"\n       }\n   }\n}"
+                },
+                "url": {
+                    "raw": "{{url}}/rest/api/2/issue/",
+                    "host": [
+                        "{{url}}"
+                    ],
+                    "path": [
+                        "rest",
+                        "api",
+                        "2",
+                        "issue",
+                        ""
+                    ]
+                },
+                "description": "Creating an issue using the JIRA REST API is as simple as making a POST with a JSON document. To create an issue, you will need to know certain key metadata, like the ID of the project that the issue will be created in, or the ID of the issue type. You can request the create metadata for all issue types across all projects by using the createmeta resource. For example:"
+            },
+            "response": []
+        },
+        {
+            "name": "Adding comment",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": [
+                        {
+                            "key": "username",
+                            "value": "{{user}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "password",
+                            "value": "{{pass}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "saveHelperData",
+                            "value": true,
+                            "type": "boolean"
+                        },
+                        {
+                            "key": "showPassword",
+                            "value": false,
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"body\":  \"h2. Example comment\\nLi Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.\"\n}"
+                },
+                "url": {
+                    "raw": "{{url}}/rest/api/2/issue/{{issue}}/comment",
+                    "host": [
+                        "{{url}}"
+                    ],
+                    "path": [
+                        "rest",
+                        "api",
+                        "2",
+                        "issue",
+                        "{{issue}}",
+                        "comment"
+                    ]
+                },
+                "description": ""
+            },
+            "response": [
+                {
+                    "id": "edc41f8a-99ac-47a7-a6a0-d4db00f36093",
+                    "name": "Adding comment",
+                    "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "type": "text",
+                                "name": "Authorization",
+                                "value": "Basic YW5kcmUubGFkZW1hbm46QWhhc2l0YWcxMw=="
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"body\":  \"h2. Example comment\\nLi Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{url}}/rest/api/2/issue/{{issue}}/comment",
+                            "host": [
+                                "{{url}}"
+                            ],
+                            "path": [
+                                "rest",
+                                "api",
+                                "2",
+                                "issue",
+                                "{{issue}}",
+                                "comment"
+                            ]
+                        }
+                    },
+                    "status": "Created",
+                    "code": 201,
+                    "_postman_previewlanguage": "json",
+                    "header": [
+                        {
+                            "name": "cache-control",
+                            "key": "cache-control",
+                            "value": "no-cache, no-store, no-transform",
+                            "description": ""
+                        },
+                        {
+                            "name": "connection",
+                            "key": "connection",
+                            "value": "Keep-Alive",
+                            "description": ""
+                        },
+                        {
+                            "name": "content-encoding",
+                            "key": "content-encoding",
+                            "value": "gzip",
+                            "description": ""
+                        },
+                        {
+                            "name": "content-security-policy",
+                            "key": "content-security-policy",
+                            "value": "frame-ancestors 'self'",
+                            "description": ""
+                        },
+                        {
+                            "name": "content-type",
+                            "key": "content-type",
+                            "value": "application/json;charset=UTF-8",
+                            "description": ""
+                        },
+                        {
+                            "name": "date",
+                            "key": "date",
+                            "value": "Tue, 22 May 2018 16:59:12 GMT",
+                            "description": ""
+                        },
+                        {
+                            "name": "keep-alive",
+                            "key": "keep-alive",
+                            "value": "timeout=5, max=100",
+                            "description": ""
+                        },
+                        {
+                            "name": "location",
+                            "key": "location",
+                            "value": "https://jira.netresearch.de/rest/api/2/issue/81370/comment/298321",
+                            "description": ""
+                        },
+                        {
+                            "name": "transfer-encoding",
+                            "key": "transfer-encoding",
+                            "value": "chunked",
+                            "description": ""
+                        },
+                        {
+                            "name": "vary",
+                            "key": "vary",
+                            "value": "User-Agent",
+                            "description": ""
+                        },
+                        {
+                            "name": "x-arequestid",
+                            "key": "x-arequestid",
+                            "value": "1139x315518x1",
+                            "description": ""
+                        },
+                        {
+                            "name": "x-asen",
+                            "key": "x-asen",
+                            "value": "SEN-10752348",
+                            "description": ""
+                        },
+                        {
+                            "name": "x-asessionid",
+                            "key": "x-asessionid",
+                            "value": "1kzqi5l",
+                            "description": ""
+                        },
+                        {
+                            "name": "x-ausername",
+                            "key": "x-ausername",
+                            "value": "andre.lademann",
+                            "description": ""
+                        },
+                        {
+                            "name": "x-content-type-options",
+                            "key": "x-content-type-options",
+                            "value": "nosniff",
+                            "description": ""
+                        },
+                        {
+                            "name": "x-frame-options",
+                            "key": "x-frame-options",
+                            "value": "SAMEORIGIN",
+                            "description": ""
+                        },
+                        {
+                            "name": "x-seraph-loginreason",
+                            "key": "x-seraph-loginreason",
+                            "value": "OK",
+                            "description": ""
+                        },
+                        {
+                            "name": "x-xss-protection",
+                            "key": "x-xss-protection",
+                            "value": "1; mode=block",
+                            "description": ""
+                        }
+                    ],
+                    "cookie": [],
+                    "responseTime": "273",
+                    "body": "{\"self\":\"https://jira.netresearch.de/rest/api/2/issue/81370/comment/298321\",\"id\":\"298321\",\"author\":{\"self\":\"https://jira.netresearch.de/rest/api/2/user?username=andre.lademann\",\"name\":\"andre.lademann\",\"key\":\"andre.lademann\",\"emailAddress\":\"andre.lademann@netresearch.de\",\"avatarUrls\":{\"48x48\":\"https://jira.netresearch.de/secure/useravatar?ownerId=andre.lademann&avatarId=15442\",\"24x24\":\"https://jira.netresearch.de/secure/useravatar?size=small&ownerId=andre.lademann&avatarId=15442\",\"16x16\":\"https://jira.netresearch.de/secure/useravatar?size=xsmall&ownerId=andre.lademann&avatarId=15442\",\"32x32\":\"https://jira.netresearch.de/secure/useravatar?size=medium&ownerId=andre.lademann&avatarId=15442\"},\"displayName\":\"André Lademann\",\"active\":true,\"timeZone\":\"Europe/Berlin\"},\"body\":\"h2. Example comment\\nLi Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.\",\"updateAuthor\":{\"self\":\"https://jira.netresearch.de/rest/api/2/user?username=andre.lademann\",\"name\":\"andre.lademann\",\"key\":\"andre.lademann\",\"emailAddress\":\"andre.lademann@netresearch.de\",\"avatarUrls\":{\"48x48\":\"https://jira.netresearch.de/secure/useravatar?ownerId=andre.lademann&avatarId=15442\",\"24x24\":\"https://jira.netresearch.de/secure/useravatar?size=small&ownerId=andre.lademann&avatarId=15442\",\"16x16\":\"https://jira.netresearch.de/secure/useravatar?size=xsmall&ownerId=andre.lademann&avatarId=15442\",\"32x32\":\"https://jira.netresearch.de/secure/useravatar?size=medium&ownerId=andre.lademann&avatarId=15442\"},\"displayName\":\"André Lademann\",\"active\":true,\"timeZone\":\"Europe/Berlin\"},\"created\":\"2018-05-22T18:59:12.397+0200\",\"updated\":\"2018-05-22T18:59:12.397+0200\"}"
+                }
+            ]
+        },
+        {
+            "name": "Adding attachment",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": [
+                        {
+                            "key": "username",
+                            "value": "{{user}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "password",
+                            "value": "{{pass}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "saveHelperData",
+                            "value": true,
+                            "type": "boolean"
+                        },
+                        {
+                            "key": "showPassword",
+                            "value": false,
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "multipart/form-data"
+                    },
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "X-Atlassian-Token",
+                            "value": "nocheck",
+                            "type": "text",
+                            "description": ""
+                        },
+                        {
+                            "key": "file",
+                            "description": "",
+                            "type": "file",
+                            "src": "10311257_1160192464013529_1503935111_n.jpg"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "{{url}}/rest/api/2/issue/{{issue}}/attachments",
+                    "host": [
+                        "{{url}}"
+                    ],
+                    "path": [
+                        "rest",
+                        "api",
+                        "2",
+                        "issue",
+                        "{{issue}}",
+                        "attachments"
+                    ]
+                },
+                "description": "Creating an issue using the JIRA REST API is as simple as making a POST with a JSON document. To create an issue, you will need to know certain key metadata, like the ID of the project that the issue will be created in, or the ID of the issue type. You can request the create metadata for all issue types across all projects by using the createmeta resource. For example:"
+            },
+            "response": []
+        },
+        {
+            "name": "Get meta data",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": [
+                        {
+                            "key": "username",
+                            "value": "{{user}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "password",
+                            "value": "{{pass}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "saveHelperData",
+                            "value": true,
+                            "type": "boolean"
+                        },
+                        {
+                            "key": "showPassword",
+                            "value": false,
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YW5kcmUubGFkZW1hbm46QWhhc2l0YWcxMw=="
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"body\":  \"h2. Example comment\\nLi Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.\"\n}"
+                },
+                "url": {
+                    "raw": "{{url}}/rest/api/2/issue/createmeta",
+                    "host": [
+                        "{{url}}"
+                    ],
+                    "path": [
+                        "rest",
+                        "api",
+                        "2",
+                        "issue",
+                        "createmeta"
+                    ]
+                },
+                "description": ""
+            },
+            "response": []
+        },
+        {
+            "name": "Search",
+            "request": {
+                "auth": {
+                    "type": "basic",
+                    "basic": [
+                        {
+                            "key": "username",
+                            "value": "{{user}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "password",
+                            "value": "{{pass}}",
+                            "type": "string"
+                        },
+                        {
+                            "key": "saveHelperData",
+                            "value": true,
+                            "type": "boolean"
+                        },
+                        {
+                            "key": "showPassword",
+                            "value": false,
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Basic YW5kcmUubGFkZW1hbm46QWhhc2l0YWcxMw=="
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"body\":  \"h2. Example comment\\nLi Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles. Ma quande lingues coalesce, li grammatica del resultant lingue es plu simplic e regulari quam ti del coalescent lingues. Li nov lingua franca va esser plu simplic e regulari quam li existent Europan lingues. It va esser tam simplic quam Occidental in fact, it va esser Occidental. A un Angleso it va semblar un simplificat Angles, quam un skeptic Cambridge amico dit me que Occidental es.Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular. Li lingues differe solmen in li grammatica, li pronunciation e li plu commun vocabules. Omnicos directe al desirabilite de un nov lingua franca: On refusa continuar payar custosi traductores. At solmen va esser necessi far uniform grammatica, pronunciation e plu sommun paroles.\"\n}"
+                },
+                "url": {
+                    "raw": "{{url}}/rest/api/2/search?jql=assignee={{user}}",
+                    "host": [
+                        "{{url}}"
+                    ],
+                    "path": [
+                        "rest",
+                        "api",
+                        "2",
+                        "search"
+                    ],
+                    "query": [
+                        {
+                            "key": "jql",
+                            "value": "assignee={{user}}",
+                            "equals": true
+                        }
+                    ]
+                },
+                "description": ""
+            },
+            "response": []
+        }
+    ]
 }

@@ -1,44 +1,44 @@
 'use strict'
 
-const _ = require('lodash');
-const async = require('async');
-const debug = require('debug')('jira-resource');
-const request = require('request');
+const _ = require('lodash')
+const async = require('async')
+const debug = require('debug')('jira-resource')
+const request = require('request')
 
-const debugResponse = require('./debugResponse.js');
+const debugResponse = require('./debugResponse.js')
 
 module.exports = (issue, source, params, callback) => {
-    if (!issue) {
-        return callback(null);
+    if ( !issue ) {
+        return callback(null)
     }
 
-    if (!params.watchers) {
+    if ( !params.watchers ) {
         return callback(null, issue)
     }
 
-    const watchersUrl = source.url + '/rest/api/2/issue/' + issue.id + '/watchers/';
+    const watchersUrl = source.url + '/rest/api/2/issue/' + issue.id + '/watchers/'
 
     debug('Adding watchers...')
 
     async.each(params.watchers,
         (watcher, next) => {
-            debug('Adding: %s', watcher);
+            debug('Adding: %s', watcher)
 
             request({
                 method: 'POST',
-                uri: watchersUrl,
-                auth: {
+                uri:    watchersUrl,
+                auth:   {
                     username: source.username,
                     password: source.password
                 },
-                json: watcher
+                json:   watcher
             }, (error, response) => {
-                debugResponse(response);
-                next(error);
+                debugResponse(response)
+                next(error)
             })
         },
         (error) => {
-            callback(error, issue);
+            callback(error, issue)
         }
-    );
-};
+    )
+}
