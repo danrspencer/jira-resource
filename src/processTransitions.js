@@ -1,5 +1,3 @@
-'use strict'
-
 const _ = require('lodash')
 const async = require('async')
 const debug = require('debug')('jira-resource')

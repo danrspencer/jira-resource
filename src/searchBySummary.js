@@ -1,5 +1,3 @@
-'use strict'
-
 const debug = require('debug')('jira-resource')
 const request = require('request')
 
