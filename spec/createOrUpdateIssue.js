@@ -1,5 +1,3 @@
-'use strict'
-
 const chai = require('chai')
 const expect = chai.expect
 
@@ -10,6 +8,7 @@ const createOrUpdateIssue = require('../src/createOrUpdateIssue.js')
 
 const jira = require('./resources/jiraDetails.js')
 const concourseInput = require('./resources/concourseInput.js')
+const concourseInputSubTask = require('./resources/concourseInputSubTask.js')
 
 nock.disableNetConnect()
 
@@ -23,8 +22,7 @@ describe('create or update issue', () => {
 
         it('creates the jira issue', (done) => {
             let input = concourseInput()
-
-            let create = setupCreate({
+            let create = setupCreateTask({
                 fields: {
                     project:     {
                         key: 'ATP'
@@ -46,7 +44,7 @@ describe('create or update issue', () => {
         it('returns the new issue', (done) => {
             let input = concourseInput()
 
-            setupCreate({
+            setupCreateTask({
                 fields: {
                     project:     {
                         key: 'ATP'
@@ -70,12 +68,36 @@ describe('create or update issue', () => {
             })
         })
 
+        it('creates the jira sub task', (done) => {
+            const input = concourseInputSubTask()
+            const create = setupCreateSubTask({
+                fields: {
+                    project:     {
+                        key: 'ATP'
+                    },
+                    parent:      {
+                        key: 'ATP-1'
+                    },
+                    issuetype:   {
+                        name: 'Sub: Task'
+                    },
+                    summary:     'Test sub task',
+                    description: 'Inline static description for sub task'
+                }
+            })
+
+            createOrUpdateIssue('', null, input.source, input.params, () => {
+                expect(create.isDone()).to.be.true
+                done()
+            })
+        })
+
         it('handles an additional field', (done) => {
             let input = concourseInput()
 
             input.params.fields.environment = 'PROD'
 
-            let createWithEnv = setupCreate({
+            let createWithEnv = setupCreateTask({
                 fields: {
                     project:     {
                         key: 'ATP'
@@ -100,7 +122,7 @@ describe('create or update issue', () => {
 
             input.params.fields.duedate = '$NOW'
 
-            let createWithDate = setupCreate((body) => {
+            let createWithDate = setupCreateTask((body) => {
                 let duedate = moment(body.fields.duedate)
                 let now = moment()
 
@@ -120,7 +142,7 @@ describe('create or update issue', () => {
             input.params.fields.tomorrow = '$NOW+1d'
             input.params.fields.abitago = '$NOW-8h'
 
-            let createWithDate = setupCreate((body) => {
+            let createWithDate = setupCreateTask((body) => {
                 let duedate = moment(body.fields.duedate)
 
                 let expectedDueDate = moment().add(5, 'm')
@@ -140,7 +162,7 @@ describe('create or update issue', () => {
             input.params.fields.tomorrow = '$NOW+1d'
             input.params.fields.abitago = '$NOW-8h'
 
-            let createWithDate = setupCreate((body) => {
+            let createWithDate = setupCreateTask((body) => {
                 let tomorrow = moment(body.fields.tomorrow)
                 let abitago = moment(body.fields.abitago)
 
@@ -167,7 +189,7 @@ describe('create or update issue', () => {
                 }
             }
 
-            let createWithCustom = setupCreate({
+            let createWithCustom = setupCreateTask({
                 fields: {
                     project:           {
                         key: 'ATP'
@@ -201,7 +223,7 @@ describe('create or update issue', () => {
                 }
             }
 
-            let createWithCustom = setupCreate({
+            let createWithCustom = setupCreateTask({
                 fields: {
                     project:           {
                         key: 'ATP'
@@ -260,7 +282,7 @@ describe('create or update issue', () => {
         it('handles an error in the request', (done) => {
             nock.cleanAll()
 
-            let input = concourseInput()
+            const input = concourseInput()
 
             createOrUpdateIssue('', null, input.source, input.params, (error, result) => {
                 expect(error).to.not.be.null
@@ -274,7 +296,7 @@ describe('create or update issue', () => {
             let input = concourseInput()
             input.params.fields.build_number = 12345
 
-            let create = setupCreate({
+            let create = setupCreateTask({
                 fields: {
                     project:      {
                         key: 'ATP'
@@ -388,7 +410,7 @@ describe('create or update issue', () => {
                     }
                 })
 
-            createOrUpdateIssue('', issue, input.source, input.params, (error, result) => {
+            createOrUpdateIssue('', issue, input.source, input.params, (error) => {
                 expect(error.message).to.equal('Could not update Jira.')
                 done()
             })
@@ -399,7 +421,7 @@ describe('create or update issue', () => {
 
             let input = concourseInput()
 
-            createOrUpdateIssue('', issue, input.source, input.params, (error, result) => {
+            createOrUpdateIssue('', issue, input.source, input.params, (error) => {
                 expect(error).to.not.be.null
                 expect(error.message).to.not.equal('Could not update Jira.')
                 done()
@@ -451,7 +473,7 @@ describe('create or update issue', () => {
                 file: 'resources/sample.out'
             }
 
-            let create = setupCreate({
+            let create = setupCreateTask({
                 fields: {
                     project:     {
                         key: 'ATP'
@@ -471,18 +493,6 @@ describe('create or update issue', () => {
         })
 
         it('replaces $FILE with contents of file', (done) => {
-            let issueId = 15805
-
-            let issue = {
-                expand: 'operations,versionedRepresentations,editmeta,changelog,renderedFields',
-                id:     issueId,
-                self:   jira.url + '/rest/api/2/issue/' + issueId,
-                key:    'ATP-1',
-                fields: {
-                    summary: 'TEST 1.106.0'
-                }
-            }
-
             let input = concourseInput()
             input.params.summary = {
                 text: 'Summary - $FILE',
@@ -493,7 +503,7 @@ describe('create or update issue', () => {
                 file: 'resources/sample.out'
             }
 
-            let create = setupCreate({
+            let create = setupCreateTask({
                 fields: {
                     project:     {
                         key: 'ATP'
@@ -515,7 +525,7 @@ describe('create or update issue', () => {
 
 })
 
-function setupCreate (expectedBody) {
+function setupCreateTask (expectedBody) {
     return nock(jira.url)
         .post('/rest/api/2/issue/', expectedBody)
         .basicAuth({
@@ -526,5 +536,19 @@ function setupCreate (expectedBody) {
             id:   '15805',
             key:  'ATP-1',
             self: jira.url + 'rest/api/2/issue/15805'
+        })
+}
+
+function setupCreateSubTask (expectedBody) {
+    return nock(jira.url)
+        .post('/rest/api/2/issue/', expectedBody)
+        .basicAuth({
+            user: jira.user,
+            pass: jira.pass
+        })
+        .reply(200, {
+            id:   '15806',
+            key:  'ATP-2',
+            self: jira.url + 'rest/api/2/issue/15806'
         })
 }

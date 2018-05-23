@@ -163,6 +163,16 @@ If you need to perform actions in a different order, for example, transitions be
       file: version/version
     transitions:
        - Submit
+
+# Create sub task
+- put: jira
+  params:
+    parent: ABC
+    issue_type: Sub: Task
+    summary:
+      text: Site v$FILE
+      file: version/version
+
 # Add a watcher then move to in dev
 - put: jira
   params:

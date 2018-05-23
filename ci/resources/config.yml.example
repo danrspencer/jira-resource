@@ -1,12 +1,13 @@
-jira-url: www.jira.com
-jira-username: username
-jira-password: password
-jira-project: awesome-project
-jira-iisuetype: Task
-jira-transition: Estimated
+jira-url:           www.jira.com
+jira-username:      username
+jira-password:      password
+jira-project:       ABC
+jira-parent:        ABC-1
+jira-issuetype:     Task
+jira-transition:    Estimated
 
-docker-username: username
-docker-password: password
-docker-email: awesome@somewere.io
+docker-username:    username
+docker-password:    password
+docker-email:       awesome@somewere.io
 
-git-username: awesome
+git-username:       awesome

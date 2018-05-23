@@ -1,5 +1,3 @@
-'use strict'
-
 const _ = require('lodash')
 const debug = require('debug')('jira-resource')
 const moment = require('moment')
@@ -90,6 +88,9 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
 
         if ( params.issue_type ) {
             fields.issuetype = { name: params.issue_type }
+        }
+        if ( params.parent ) {
+            fields.parent = { key: params.parent }
         }
 
         return fields

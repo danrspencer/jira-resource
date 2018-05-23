@@ -31,7 +31,7 @@ jobs:
   - put: jira
     params:
       issue_type: ((jira-issuetype))
-      summary: Example jira ticket
+      summary: Example jira ticket $NOW
       fields:
         description:
           file: git-jira-resource/spec/resources/sample.out
@@ -40,3 +40,14 @@ jobs:
         duedate: $NOW+1H
       transitions:
       - ((jira-transition))
+  - put: jira
+    params:
+      parent: ((jira-parent))
+      issue_type: ((jira-issuetype))
+      summary: Example jira sub ticket from concourse $NOW
+      fields:
+        description:
+          file: git-jira-resource/spec/resources/sample.out
+          text: Static text - $FILE
+        environment: PROD
+        duedate: $NOW+1H
