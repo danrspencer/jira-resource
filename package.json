@@ -20,6 +20,7 @@
   "homepage": "https://github.com/danrspencer/jira-resource#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "eslint": "^4.19.1",
     "mocha": "^5.2.0",
     "nock": "^9.2.6",
     "request-debug": "^0.2.0"

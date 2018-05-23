@@ -1,0 +1,37 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": false
+        }
+    },
+    "env": {
+        "es6": true,
+        "mocha": true,
+        "node": true
+    },
+    "rules": {
+        "no-else-return": 2,
+        "no-multi-spaces": 2,
+        "indent": [2,"Error parsing input"],
+        "lines-around-comment": [2,{"beforeBlockComment":true,"beforeLineComment":true}],
+        "linebreak-style": [2,"unix"],
+        "quotes": [2,"single",null],
+        "comma-dangle": [2,"always-multiline"],
+        "no-console": 1,
+        "no-extra-semi": 2,
+        "valid-jsdoc": 1,
+        "valid-typeof": 1,
+        "no-alert": 2,
+        "strict": [2,"global"],
+        "no-undef": 2,
+        "no-undefined": 2,
+        "no-unused-vars": 2,
+        "arrow-parens": [1,"always"],
+        "arrow-spacing": [1,{"before":true,"after":true}],
+        "prefer-const": 2,
+        "max-depth": [2,4],
+        "max-len": [2,80,120,{"ignoreComments":true,"ignoreUrls":true}]
+    }
+}
