@@ -5,6 +5,7 @@ Jira Ticket Resource
 [![CircleCI](https://circleci.com/gh/vergissberlin/jira-resource/tree/master.svg?style=shield)](https://circleci.com/gh/vergissberlin/jira-resource)
 [![dependencies Status](https://david-dm.org/vergissberlin/jira-resource/status.svg)](https://david-dm.org/vergissberlin/jira-resource)
 [![devDependencies Status](https://david-dm.org/vergissberlin/jira-resource/dev-status.svg)](https://david-dm.org/vergissberlin/jira-resource?type=dev)
+[![Code Coverage](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/?branch=master)
 
 Create and update Jira tickets via Concourse
 
