@@ -1,12 +1,16 @@
 build:
-    dependencies:
-        before:
-            - npm install istanbul
-
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - js-scrutinizer-run
+        tests: true
     tests:
         override:
             -
-                command: 'istanbul cover --report clover --dir reports/coverage src/*.js'
+                command: 'node node_modules/mocha/bin/istanbul cover --report clover --dir reports/coverage src/*.js'
                 coverage:
                     file: 'reports/coverage/clover.xml'
                     format: 'clover'
+checks:
+    javascript: true

@@ -7,7 +7,7 @@ test:
         environment:
           MOCHA_FILE: $CIRCLE_TEST_REPORTS/junit/test-results.xml
     - node node_modules/mocha/bin/mocha ./spec/ --async-only --reporter mocha-simple-html-reporter --reporter-options output=$CIRCLE_TEST_REPORTS/mocha.html:
-    - istanbul cover --report clover --dir $CIRCLE_TEST_REPORTS/coverage src/*.js
+    - node node_modules/mocha/bin/istanbul cover --report clover --dir $CIRCLE_TEST_REPORTS/coverage src/*.js
 dependencies:
   cache_directories:
     - "node_modules"
