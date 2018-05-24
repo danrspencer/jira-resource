@@ -1,6 +1,3 @@
-workflows:
-  version: 2
-
 machine:
   node:
     version: node
@@ -16,9 +13,3 @@ test:
 dependencies:
   cache_directories:
     - "node_modules"
-
-jobs:
-  build:
-    branches:
-      ignore:
-        - version
