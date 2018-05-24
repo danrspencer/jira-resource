@@ -4,10 +4,10 @@
   "description": "Jira Ticket Resource",
   "main": "out.js",
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha ./spec/  --async-only",
-    "test-watch": "node node_modules/mocha/bin/mocha ./spec/  --async-only --watch --growl",
-    "test-watch-debug": "DEBUG=jira-resource node node_modules/mocha/bin/mocha ./spec/  --async-only --watch --growl",
-    "test-report": "node node_modules/mocha/bin/mocha ./spec/  --async-only --reporter mocha-junit-reporter --reporter-options mochaFile=reports/junit/mocha.xml",
+    "test": "node node_modules/mocha/bin/mocha ./spec/ --async-only",
+    "test-watch": "node node_modules/mocha/bin/mocha ./spec/ --async-only --watch --growl",
+    "test-watch-debug": "DEBUG=jira-resource node node_modules/mocha/bin/mocha ./spec/ --async-only --watch --growl",
+    "test-report": "node node_modules/mocha/bin/mocha ./spec/ --async-only --reporter mocha-junit-reporter --reporter-options mochaFile=reports/junit/mocha.xml",
     "test-with-coverage": "./node_modules/.bin/istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | codacy-coverage && rm -rf ./coverage"
   },
   "repository": {
