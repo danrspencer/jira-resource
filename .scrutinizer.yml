@@ -8,7 +8,7 @@ build:
     tests:
         override:
             -
-                command: './node_modules/.bin/istanbul cover --report clover --dir reports/coverage src/*.js'
+                command: 'node ./node_modules/.bin/istanbul cover --report clover --dir reports/coverage src/*.js'
                 coverage:
                     file: 'reports/coverage/clover.xml'
                     format: 'clover'
