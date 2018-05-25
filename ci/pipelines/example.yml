@@ -1,43 +1,42 @@
-jobs:
-- name: update-jira
-  plan:
-  - get: jira-resource
-  - put: jira
-    params:
-      issue_type: Change
-      summary: Example jira ticket
-      fields:
-        description:
-          file: jira-resource/spec/sample.out
-          text: Static text - $FILE
-        environment: PROD
-        duedate: $NOW+1H
-      custom_fields:
-        agcc_impact:
-          id: 10201
-          value: none
-      transitions:
-      - Submit
+---
 
 resources:
-  - name: jira-resource
+  - name: git-jira-resource
     type: git
     source:
-      uri: git@github.com:danrspencer/jira-resource.git
+      uri: git@github.com:((git-username))/jira-resource.git
       branch: master
-      private_key: {{private-repo-key}}
+      private_key: ((private-repo-key))
 
   - name: jira
     type: jira
     source:
-      url: {{jira-url}}
-      username: {{jira-username}}
-      password: {{jira-password}}
-      project: {{jira-project}}
+      url: ((jira-url))
+      username: ((jira-username))
+      password: ((jira-password))
+      project: ((jira-project))
 
 resource_types:
 - name: jira
   type: docker-image
   source:
-    repository: danrspencer/jira-resource
+    repository: ((git-username))/jira-resource
     tag: latest
+
+jobs:
+- name: update-jira
+  plan:
+  - get: git-jira-resource
+    trigger: true
+  - put: jira
+    params:
+      issue_type: ((jira-issuetype))
+      summary: Example jira ticket
+      fields:
+        description:
+          file: git-jira-resource/spec/resources/sample.out
+          text: Static text - $FILE
+        environment: PROD
+        duedate: $NOW+1H
+      transitions:
+      - ((jira-transition))

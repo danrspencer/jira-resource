@@ -1,4 +1,12 @@
-jira-uri: www.jira.com
+jira-url: www.jira.com
 jira-username: username
 jira-password: password
 jira-project: awesome-project
+jira-iisuetype: Task
+jira-transition: Estimated
+
+docker-username: username
+docker-password: password
+docker-email: awesome@somewere.io
+
+git-username: awesome

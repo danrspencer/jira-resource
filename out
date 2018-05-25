@@ -3,22 +3,22 @@
 'use strict'
 
 // This must be set BEFORE out.js is required for the debug info to show up
-process.env.DEBUG='*';
+process.env.DEBUG = '*'
 
-const fs = require('fs');
-const out = require('./src/out.js');
+const fs = require('fs')
+const out = require('./src/out.js')
 
-let putDir = process.argv[2];
+let putDir = process.argv[2]
 
-process.stdin.resume();
-process.stdin.setEncoding('utf8');
-process.stdin.on('data', function(data) {
+process.stdin.resume()
+process.stdin.setEncoding('utf8')
+process.stdin.on('data', function (data) {
     out(JSON.parse(data), putDir, (error, result) => {
-        if (error) {
-            process.stderr.write(error.message);
-            process.exit(1);
+        if ( error ) {
+            process.stderr.write(error.message)
+            process.exit(1)
         }
 
-        process.stdout.write(JSON.stringify(result));
-    });
-});
+        process.stdout.write(JSON.stringify(result))
+    })
+})

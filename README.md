@@ -1,5 +1,11 @@
-Jira Ticket Resource
-===================================
+Jira Ticket Resource 
+====================
+
+[![Build Status](https://travis-ci.org/vergissberlin/jira-resource.svg?branch=master)](https://travis-ci.org/vergissberlin/jira-resource)
+[![CircleCI](https://circleci.com/gh/vergissberlin/jira-resource/tree/master.svg?style=shield)](https://circleci.com/gh/vergissberlin/jira-resource)
+[![dependencies Status](https://david-dm.org/vergissberlin/jira-resource/status.svg)](https://david-dm.org/vergissberlin/jira-resource)
+[![devDependencies Status](https://david-dm.org/vergissberlin/jira-resource/dev-status.svg)](https://david-dm.org/vergissberlin/jira-resource?type=dev)
+[![Code Coverage](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/?branch=master)
 
 Create and update Jira tickets via Concourse
 
@@ -50,8 +56,8 @@ Behavior
 #### $TEXT
 
 The `summary`, `fields` and `custom_fields` can be either a string value, or an object with `text` / `file` fields. If just the `file` is specified it is used to populate the field, if both `file` and `text` are specified then the file is substituted in to replace $FILE in the text.
-   
-e.g. 
+
+e.g.
 
 ```yaml
 description: An awesome ticket
@@ -62,7 +68,7 @@ description:
 description:
   text: |
     Substitute text into this messaage
-        
+
     $TEXT
   file: messages/jira-message
 ```
@@ -70,7 +76,7 @@ description:
 #### $NOW
 
 If a date field needs to be populated with a date relative to current time `$NOW` can be used. The datetime can be modified relative to the current date.
- 
+
 e.g.
 ```
 $NOW
@@ -108,7 +114,7 @@ fields:
   description:
     text: |
       Routine Release
-            
+
       $FILE
     file: messages/jira-release-notes
   environment: Prod
@@ -120,7 +126,7 @@ custom_fields:
   this_text_doesnt_matter:
     id: 10201
     value: Something
-```        
+```
 * `watchers`: An array of usernames to be added as watchers to the ticket
 ```yaml
 watchers:
@@ -134,7 +140,7 @@ transitions:
   - Submit
   - In Dev
 ```
- 
+
 #### Order of execution
 
 When executing the Jira job the ticket is updated in the following order:
@@ -145,9 +151,9 @@ When executing the Jira job the ticket is updated in the following order:
 * Perform transitions
 
 If you need to perform actions in a different order, for example, transitions before adding watchers then multiple jobs are required.
- 
+
  e.g.
- 
+
 ```yaml
 # Create ticket and Submit
 - put: jira
@@ -235,7 +241,7 @@ resources:
     uri: git@github.com:danrspencer/jira-resource.git
     branch: master
     private_key: {{private-repo-key}}
-      
+
 - name: version
   type: semver
   source:
@@ -244,7 +250,7 @@ resources:
     branch: version
     private_key: {{private-repo-key}}
     file: version
-      
+
 - name: jira
   type: jira-resource
   source:

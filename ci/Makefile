@@ -7,15 +7,22 @@ fly-linux:
 	chmod +x fly
 
 login:
-	./fly --target live login --concourse-url http://192.168.100.4:8080
+	./fly --target main-jira login --concourse-url http://192.168.100.4:8080
 
 pipeline:
-	./fly --target live set-pipeline --pipeline jira-resource \
+	./fly --target main-jira set-pipeline --pipeline jira-resource \
                                      --config pipelines/pipeline.yml \
-                                     --var "private-repo-key=`cat ~/.ssh/id_rsa`"
+                                     --load-vars-from resources/config.yml \
+                                     --var "private-repo-key=`cat ~/.ssh/id_rsa`" \
+                                     -n
 
 example:
-	./fly --target live set-pipeline --pipeline jira-resource-example \
+	./fly --target main-jira set-pipeline --pipeline jira-resource-example \
                                      --config pipelines/example.yml \
                                      --load-vars-from resources/config.yml \
-                                     --var "private-repo-key=`cat ~/.ssh/id_rsa`"
+                                     --var "private-repo-key=`cat ~/.ssh/id_rsa`" \
+                                     -n
+
+unpause:
+	./fly -t main-jira unpause-pipeline -p jira-resource
+	./fly -t main-jira unpause-pipeline -p jira-resource-example

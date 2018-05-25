@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "stable"
+  - "lts/*"
+cache:
+  directories:
+    - "node_modules"
+branches:
+  except:
+  - version

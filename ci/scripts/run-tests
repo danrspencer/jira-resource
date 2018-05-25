@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd jira-resource
+cd git-jira-resource
 
 npm install
 npm test
