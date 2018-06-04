@@ -1,12 +1,8 @@
-'use strict'
-
 const chai = require('chai')
 const expect = chai.expect
 
 const nock = require('nock')
 const out = require('../src/out.js')
-
-const searchBySummary = require('../src/searchBySummary.js')
 
 const jira = require('./resources/jiraDetails.js')
 const concourseInput = require('./resources/concourseInput.js')

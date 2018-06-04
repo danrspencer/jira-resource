@@ -1,7 +1,7 @@
 {
   "name": "jira-resource",
   "version": "1.0.0",
-  "description": "Jira Ticket Resource",
+  "description": "Jira ticket resource for concourse ci",
   "main": "out.js",
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha ./spec/ --async-only",
@@ -24,6 +24,7 @@
   "homepage": "https://github.com/danrspencer/jira-resource#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "eslint": "^4.19.1",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "mocha-junit-reporter": "^1.17.0",

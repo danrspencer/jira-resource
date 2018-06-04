@@ -2,10 +2,9 @@ Jira Ticket Resource
 ====================
 
 [![Build Status](https://travis-ci.org/vergissberlin/jira-resource.svg?branch=master)](https://travis-ci.org/vergissberlin/jira-resource)
-[![CircleCI](https://circleci.com/gh/vergissberlin/jira-resource/tree/master.svg?style=shield)](https://circleci.com/gh/vergissberlin/jira-resource)
-[![dependencies Status](https://david-dm.org/vergissberlin/jira-resource/status.svg)](https://david-dm.org/vergissberlin/jira-resource)
-[![devDependencies Status](https://david-dm.org/vergissberlin/jira-resource/dev-status.svg)](https://david-dm.org/vergissberlin/jira-resource?type=dev)
-[![Code Coverage](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/?branch=master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f2ff0bbe8ec746b7af07d3bb088e0787)](https://www.codacy.com/app/andre_1725/jira-resource?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vergissberlin/jira-resource&amp;utm_campaign=Badge_Grade)
 
 Create and update Jira tickets via Concourse
 
@@ -164,6 +163,16 @@ If you need to perform actions in a different order, for example, transitions be
       file: version/version
     transitions:
        - Submit
+
+# Create sub task
+- put: jira
+  params:
+    parent: ABC
+    issue_type: Sub: Task
+    summary:
+      text: Site v$FILE
+      file: version/version
+
 # Add a watcher then move to in dev
 - put: jira
   params:

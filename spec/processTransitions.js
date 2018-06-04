@@ -1,9 +1,6 @@
-'use strict'
-
 const chai = require('chai')
 const expect = chai.expect
 
-const moment = require('moment')
 const nock = require('nock')
 
 const processTransitions = require('../src/processTransitions.js')
