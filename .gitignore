@@ -1,13 +1,12 @@
-node_modules
-npm-debug.log
-
-real.json
+/node_modules
+/npm-debug.log
+/coverage
+/reports
 
 .idea
 .vagrant
 
 *.swp
-
-fly
 config.yml
-sample/real.json
+fly
+real.json

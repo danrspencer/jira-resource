@@ -1,5 +1,5 @@
-Jira Ticket Resource
-===================================
+Jira Ticket Resource 
+====================
 
 [![Build Status](https://travis-ci.org/vergissberlin/jira-resource.svg?branch=master)](https://travis-ci.org/vergissberlin/jira-resource)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/vergissberlin/jira-resource/?branch=master)
