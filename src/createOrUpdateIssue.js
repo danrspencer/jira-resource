@@ -134,7 +134,16 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
                 return "customfield_" + value.id;
             })
             .mapValues(value => {
-                return value.value;
+                if (!value.type) {
+                    return value.value;
+                }
+
+                switch (value.type.toLowerCase()) {
+                    case "selectlist":
+                        return { value: value.value };
+                    default:
+                        return value.value;
+                }
             })
             .value();
     }
