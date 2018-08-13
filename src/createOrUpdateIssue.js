@@ -80,18 +80,30 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
     }
 
     function processFields() {
-        let fields = params.fields || {};
+        const standardFields = params.fields || {};
 
-        fields.summary = params.summary;
+        standardFields.summary = params.summary;
 
-        fields = _.merge(parseCustomFields(params), fields);
+        const customFields = parseCustomFields(params);
+        const nonExpandableCustomFields = _.pickBy(customFields, value => {
+            return typeof value === "object";
+        });
+        const expandableCustomFields = _.pickBy(customFields, value => {
+            return typeof value !== "object";
+        });
+        const expandableFields = _.merge(
+            expandableCustomFields,
+            standardFields
+        );
 
-        fields = _(fields)
+        const expandedFields = _(expandableFields)
             .mapValues(value => {
                 return replaceTextFileString(baseFileDir, value);
             })
             .mapValues(replaceNowString)
             .value();
+
+        const fields = _.merge(nonExpandableCustomFields, expandedFields);
 
         fields.project = { key: source.project };
 
