@@ -215,7 +215,7 @@ describe("create or update issue", () => {
             });
         });
 
-        it("handles a selectlist custom field", done => {
+        it("handles a selectlist custom field with a string value", done => {
             let input = concourseInput();
 
             input.params.custom_fields = {
@@ -237,6 +237,37 @@ describe("create or update issue", () => {
                     summary: "TEST 1.106.0",
                     description: "Inline static description",
                     customfield_10201: { value: "dave!" }
+                }
+            });
+
+            createOrUpdateIssue("", null, input.source, input.params, () => {
+                expect(createWithCustom.isDone()).to.be.true;
+                done();
+            });
+        });
+
+        it("handles a selectlist custom field with a value id", done => {
+            let input = concourseInput();
+
+            input.params.custom_fields = {
+                selectlist_field: {
+                    id: 10201,
+                    type: "selectlist",
+                    value_id: 123
+                }
+            };
+
+            let createWithCustom = setupCreateTask({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "TEST 1.106.0",
+                    description: "Inline static description",
+                    customfield_10201: { id: "123" }
                 }
             });
 

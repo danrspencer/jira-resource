@@ -5,6 +5,7 @@ const request = require("request");
 
 const debugResponse = require("./debugResponse.js");
 const replaceTextFileString = require("./replaceTextFileString.js");
+const customFieldFactory = require("./customFieldFactory.js")();
 
 module.exports = (baseFileDir, existingIssue, source, params, callback) => {
     if (existingIssue) {
@@ -136,27 +137,24 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
         );
     }
 
+    function makeSelectListCustomFieldApiPayload(customField) {
+        if (value.value_id) {
+            return { id: value.value_id };
+        }
+
+        return { value: value.value };
+    }
+
     function parseCustomFields(params) {
         if (!params.custom_fields) {
             return {};
         }
 
         return _(params.custom_fields)
-            .mapKeys(value => {
-                return "customfield_" + value.id;
-            })
-            .mapValues(value => {
-                if (!value.type) {
-                    return value.value;
-                }
-
-                switch (value.type.toLowerCase()) {
-                    case "selectlist":
-                        return { value: value.value };
-                    default:
-                        return value.value;
-                }
-            })
+            .mapKeys(value => "customfield_" + value.id)
+            .mapValues(value =>
+                customFieldFactory.buildCustomField(value).toApiPayload()
+            )
             .value();
     }
 };
