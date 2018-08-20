@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 module.exports = (baseFileDir, value) => {
-    if (typeof value !== "object") {
+    if (typeof value !== "object" || !value.file) {
         return value;
     }
 

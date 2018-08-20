@@ -54,7 +54,7 @@ Behavior
 
 #### $TEXT
 
-The `summary`, `fields` and `custom_fields` can be either a string value, or an object with `text` / `file` fields. If just the `file` is specified it is used to populate the field, if both `file` and `text` are specified then the file is substituted in to replace $FILE in the text.
+The `summary`, `fields` and `custom_fields` can be either a string value, or an object with `text` / `file` fields. Additionally, certain custom field types can also be objects. If just the `file` is specified it is used to populate the field, if both `file` and `text` are specified then the file is substituted in to replace $FILE in the text.
 
 e.g.
 
@@ -119,12 +119,22 @@ fields:
   environment: Prod
   duedate: $NOW+1h
 ```
-* `custom_fields`: A list of custom fields to update. The id and value are used to update the custom field. The property title doesn't matter, it's purpose is to make the pipeline yml more understandable.
+* `custom_fields`: A list of custom fields to update. The id and value are used to update the custom field. You can also specify the type of custom field. Currently supported types are:
+    * Default (no type specified): set a `FreeTextField` custom field.
+    * `selectlist`: set a `SelectList` custom field.
+
+Have a look at the [JIRA API documentation](https://developer.atlassian.com/server/jira/platform/jira-rest-api-examples/#creating-an-issue-examples) for more information about the different field types and their content format.
+
+The property title doesn't matter, it's purpose is to make the pipeline yml more understandable.
 ```yaml
 custom_fields:
-  this_text_doesnt_matter:
+  sample_freetext_field:
     id: 10201
     value: Something
+  sample_selectlist_field:
+    id: 10202
+    type: selectlist
+    value: Some selectlist value
 ```
 * `watchers`: An array of usernames to be added as watchers to the ticket
 ```yaml

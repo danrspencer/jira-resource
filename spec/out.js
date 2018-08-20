@@ -9,7 +9,7 @@ const jira = require("./resources/jiraDetails.js");
 const baseFileDir = process.cwd() + "/spec";
 
 /** Uncomment the below for sexy debug shizzles **/
-//require('request-debug')(require('request'));
+//require("request-debug")(require("request"));
 
 nock.disableNetConnect();
 
