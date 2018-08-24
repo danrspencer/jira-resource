@@ -5,6 +5,7 @@ const request = require("request");
 
 const debugResponse = require("./debugResponse.js");
 const replaceTextFileString = require("./replaceTextFileString.js");
+const customFieldFactory = require("./customFieldFactory.js")();
 
 module.exports = (baseFileDir, existingIssue, source, params, callback) => {
     if (existingIssue) {
@@ -80,18 +81,30 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
     }
 
     function processFields() {
-        let fields = params.fields || {};
+        const standardFields = params.fields || {};
 
-        fields.summary = params.summary;
+        standardFields.summary = params.summary;
 
-        fields = _.merge(parseCustomFields(params), fields);
+        const customFields = parseCustomFields(params);
+        const nonExpandableCustomFields = _.pickBy(customFields, value => {
+            return typeof value === "object";
+        });
+        const expandableCustomFields = _.pickBy(customFields, value => {
+            return typeof value !== "object";
+        });
+        const expandableFields = _.merge(
+            expandableCustomFields,
+            standardFields
+        );
 
-        fields = _(fields)
+        const expandedFields = _(expandableFields)
             .mapValues(value => {
                 return replaceTextFileString(baseFileDir, value);
             })
             .mapValues(replaceNowString)
             .value();
+
+        const fields = _.merge(nonExpandableCustomFields, expandedFields);
 
         fields.project = { key: source.project };
 
@@ -124,18 +137,24 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
         );
     }
 
+    function makeSelectListCustomFieldApiPayload(customField) {
+        if (value.value_id) {
+            return { id: value.value_id };
+        }
+
+        return { value: value.value };
+    }
+
     function parseCustomFields(params) {
         if (!params.custom_fields) {
             return {};
         }
 
         return _(params.custom_fields)
-            .mapKeys(value => {
-                return "customfield_" + value.id;
-            })
-            .mapValues(value => {
-                return value.value;
-            })
+            .mapKeys(value => "customfield_" + value.id)
+            .mapValues(value =>
+                customFieldFactory.buildCustomField(value).toApiPayload()
+            )
             .value();
     }
 };
