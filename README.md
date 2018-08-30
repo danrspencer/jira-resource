@@ -69,7 +69,7 @@ description:
   text: |
     Substitute text into this messaage
 
-    $TEXT
+    $FILE
   file: messages/jira-message
 ```
 
