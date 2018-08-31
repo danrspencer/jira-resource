@@ -1,6 +1,6 @@
-## I'm no longer actively maintaining this repository and I won't be performing any more development myself for the foreseeable future. 
+### I'm no longer actively maintaining this repository and I won't be performing any more development myself for the foreseeable future. 
 
-I am happy to look over and merge any pull requests raised.
+### I am happy to look over and merge any pull requests raised.
 ---
 
 # Jira Ticket Resource
