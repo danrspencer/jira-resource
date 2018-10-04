@@ -1,20 +1,20 @@
-const async = require("async");
-const debug = require("debug")("jira-resource");
+const async = require('async');
+const debug = require('debug')('jira-resource');
 
-const addWatchers = require("./addWatchers.js");
-const createOrUpdateIssue = require("./createOrUpdateIssue.js");
-const processTransitions = require("./processTransitions");
-const searchBySummary = require("./searchBySummary.js");
+const addWatchers = require('./addWatchers.js');
+const createOrUpdateIssue = require('./createOrUpdateIssue.js');
+const processTransitions = require('./processTransitions');
+const searchBySummary = require('./searchBySummary.js');
 
 module.exports = (input, baseFileDir, callback) => {
     const source = input.source;
     const params = input.params;
 
-    debug("Searching for issue: %s", input.params.summary);
+    debug('Searching for issue: %s', input.params.summary);
 
     async.waterfall(
         [
-            next => {
+            (next) => {
                 searchBySummary(baseFileDir, source, params, next);
             },
             (issue, next) => {
@@ -37,7 +37,7 @@ module.exports = (input, baseFileDir, callback) => {
                     }
                 };
             } else if (!error) {
-                error = new Error("Could not create issue.");
+                error = new Error('Could not create issue.');
             }
 
             callback(error, output);

@@ -1,8 +1,8 @@
-const async = require("async");
-const debug = require("debug")("jira-resource");
-const request = require("request");
+const async = require('async');
+const debug = require('debug')('jira-resource');
+const request = require('request');
 
-const debugResponse = require("./debugResponse.js");
+const debugResponse = require('./debugResponse.js');
 
 module.exports = (issue, source, params, callback) => {
     if (!issue) {
@@ -14,18 +14,18 @@ module.exports = (issue, source, params, callback) => {
     }
 
     const watchersUrl =
-        source.url + "/rest/api/2/issue/" + issue.id + "/watchers/";
+        source.url + '/rest/api/2/issue/' + issue.id + '/watchers/';
 
-    debug("Adding watchers...");
+    debug('Adding watchers...');
 
     async.each(
         params.watchers,
         (watcher, next) => {
-            debug("Adding: %s", watcher);
+            debug('Adding: %s', watcher);
 
             request(
                 {
-                    method: "POST",
+                    method: 'POST',
                     uri: watchersUrl,
                     auth: {
                         username: source.username,
@@ -39,7 +39,7 @@ module.exports = (issue, source, params, callback) => {
                 }
             );
         },
-        error => {
+        (error) => {
             callback(error, issue);
         }
     );

@@ -1,15 +1,15 @@
-const _ = require("lodash");
-const debug = require("debug")("jira-resource");
-const moment = require("moment");
-const request = require("request");
+const _ = require('lodash');
+const debug = require('debug')('jira-resource');
+const moment = require('moment');
+const request = require('request');
 
-const debugResponse = require("./debugResponse.js");
-const replaceTextFileString = require("./replaceTextFileString.js");
-const customFieldFactory = require("./customFieldFactory.js")();
+const debugResponse = require('./debugResponse.js');
+const replaceTextFileString = require('./replaceTextFileString.js');
+const customFieldFactory = require('./customFieldFactory.js')();
 
 module.exports = (baseFileDir, existingIssue, source, params, callback) => {
     if (existingIssue) {
-        return updateIssue(error => {
+        return updateIssue((error) => {
             callback(error, existingIssue);
         });
     }
@@ -19,14 +19,14 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
     });
 
     function createIssue(done) {
-        debug("Issue doesn't exist, creating new issue...");
+        debug('Issue doesn\'t exist, creating new issue...');
 
         return requestIssue(
-            source.url + "/rest/api/2/issue/",
-            "POST",
+            source.url + '/rest/api/2/issue/',
+            'POST',
             (error, response, body) => {
                 if (!error && !body) {
-                    return done(new Error("Could not create issue."));
+                    return done(new Error('Could not create issue.'));
                 }
 
                 done(error, body);
@@ -38,11 +38,11 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
         let issueId = existingIssue.id;
         let issueKey = existingIssue.key;
 
-        debug("Issue exists [%s], updating issue...", issueKey);
+        debug('Issue exists [%s], updating issue...', issueKey);
 
         return requestIssue(
-            source.url + "/rest/api/2/issue/" + issueId,
-            "PUT",
+            source.url + '/rest/api/2/issue/' + issueId,
+            'PUT',
             done
         );
     }
@@ -52,7 +52,7 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
             fields: processFields()
         };
 
-        debug("Sending issue: %s", JSON.stringify(issue, null, 2));
+        debug('Sending issue: %s', JSON.stringify(issue, null, 2));
 
         request(
             {
@@ -72,7 +72,7 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
                 debugResponse(response);
 
                 if (response.statusCode < 200 || 300 <= response.statusCode) {
-                    return callback(new Error("Could not update Jira."));
+                    return callback(new Error('Could not update Jira.'));
                 }
 
                 callback(error, response, body);
@@ -86,11 +86,11 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
         standardFields.summary = params.summary;
 
         const customFields = parseCustomFields(params);
-        const nonExpandableCustomFields = _.pickBy(customFields, value => {
-            return typeof value === "object";
+        const nonExpandableCustomFields = _.pickBy(customFields, (value) => {
+            return typeof value === 'object';
         });
-        const expandableCustomFields = _.pickBy(customFields, value => {
-            return typeof value !== "object";
+        const expandableCustomFields = _.pickBy(customFields, (value) => {
+            return typeof value !== 'object';
         });
         const expandableFields = _.merge(
             expandableCustomFields,
@@ -98,7 +98,7 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
         );
 
         const expandedFields = _(expandableFields)
-            .mapValues(value => {
+            .mapValues((value) => {
                 return replaceTextFileString(baseFileDir, value);
             })
             .mapValues(replaceNowString)
@@ -126,7 +126,7 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
             (match, change, unit) => {
                 let date = moment();
 
-                unit = unit || "m";
+                unit = unit || 'm';
 
                 if (change) {
                     date = date.add(change, unit);
@@ -137,22 +137,14 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
         );
     }
 
-    function makeSelectListCustomFieldApiPayload(customField) {
-        if (value.value_id) {
-            return { id: value.value_id };
-        }
-
-        return { value: value.value };
-    }
-
     function parseCustomFields(params) {
         if (!params.custom_fields) {
             return {};
         }
 
         return _(params.custom_fields)
-            .mapKeys(value => "customfield_" + value.id)
-            .mapValues(value =>
+            .mapKeys((value) => 'customfield_' + value.id)
+            .mapValues((value) =>
                 customFieldFactory.buildCustomField(value).toApiPayload()
             )
             .value();

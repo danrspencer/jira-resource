@@ -1,9 +1,9 @@
-const _ = require("lodash");
-const async = require("async");
-const debug = require("debug")("jira-resource");
-const request = require("request");
+const _ = require('lodash');
+const async = require('async');
+const debug = require('debug')('jira-resource');
+const request = require('request');
 
-const debugResponse = require("./debugResponse.js");
+const debugResponse = require('./debugResponse.js');
 
 module.exports = (issue, source, params, callback) => {
     if (!issue) {
@@ -15,7 +15,7 @@ module.exports = (issue, source, params, callback) => {
     }
 
     const transitionUrl =
-        source.url + "/rest/api/2/issue/" + issue.id + "/transitions/";
+        source.url + '/rest/api/2/issue/' + issue.id + '/transitions/';
 
     async.eachSeries(
         params.transitions,
@@ -32,12 +32,12 @@ module.exports = (issue, source, params, callback) => {
     function processTransition(transitionUrl, transitionName, done) {
         async.waterfall(
             [
-                next => {
-                    debug("Searching for available transitions...");
+                (next) => {
+                    debug('Searching for available transitions...');
 
                     request(
                         {
-                            method: "GET",
+                            method: 'GET',
                             uri: transitionUrl,
                             auth: {
                                 username: source.username,
@@ -50,7 +50,7 @@ module.exports = (issue, source, params, callback) => {
 
                             let transitionId = _.filter(
                                 body.transitions,
-                                transition => {
+                                (transition) => {
                                     return (
                                         transition.name.toLowerCase() ==
                                         transitionName.toLowerCase()
@@ -64,14 +64,14 @@ module.exports = (issue, source, params, callback) => {
                 },
                 (transitionId, done) => {
                     debug(
-                        "Performing transition: %s (%s)",
+                        'Performing transition: %s (%s)',
                         transitionName,
                         transitionId
                     );
 
                     request(
                         {
-                            method: "POST",
+                            method: 'POST',
                             uri: transitionUrl,
                             auth: {
                                 username: source.username,
