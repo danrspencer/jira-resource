@@ -4,7 +4,7 @@
   "description": "Jira ticket resource for concourse ci",
   "main": "out.js",
   "scripts": {
-    "precommit": "pretty-quick --staged",
+    "precommit": "./node_modules/.bin/eslint --fix src && git add .",
     "test": "node node_modules/mocha/bin/mocha ./spec/ --async-only",
     "test-watch": "node node_modules/mocha/bin/mocha ./spec/ --async-only --watch --growl",
     "test-watch-debug": "DEBUG=jira-resource node node_modules/mocha/bin/mocha ./spec/ --async-only --watch --growl",
@@ -33,8 +33,6 @@
     "mocha-lcov-reporter": "^1.3.0",
     "mocha-simple-html-reporter": "^1.1.0",
     "nock": "^9.2.6",
-    "prettier": "^1.13.4",
-    "pretty-quick": "^1.6.0",
     "request-debug": "^0.2.0"
   },
   "dependencies": {

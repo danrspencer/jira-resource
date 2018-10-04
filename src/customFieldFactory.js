@@ -1,5 +1,5 @@
-const FreeTextCustomField = require("./freeTextCustomField.js");
-const SelectListCustomField = require("./selectListCustomField.js");
+const FreeTextCustomField = require('./freeTextCustomField.js');
+const SelectListCustomField = require('./selectListCustomField.js');
 
 module.exports = () => {
     function buildCustomField(customField) {
@@ -8,7 +8,7 @@ module.exports = () => {
         }
 
         switch (customField.type.toLowerCase()) {
-            case "selectlist":
+            case 'selectlist':
                 return new SelectListCustomField(
                     customField.value,
                     customField.value_id
