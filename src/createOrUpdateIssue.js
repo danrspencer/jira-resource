@@ -1,160 +1,144 @@
-const _ = require("lodash");
-const debug = require("debug")("jira-resource");
-const moment = require("moment");
-const request = require("request");
+const _ = require('lodash');
+const debug = require('debug')('jira-resource');
+const moment = require('moment');
+const request = require('request');
 
-const debugResponse = require("./debugResponse.js");
-const replaceTextFileString = require("./replaceTextFileString.js");
-const customFieldFactory = require("./customFieldFactory.js")();
+const debugResponse = require('./debugResponse.js');
+const replaceTextFileString = require('./replaceTextFileString.js');
+const customFieldFactory = require('./customFieldFactory.js')();
 
 module.exports = (baseFileDir, existingIssue, source, params, callback) => {
-    if (existingIssue) {
-        return updateIssue(error => {
-            callback(error, existingIssue);
-        });
-    }
-
-    return createIssue((error, newIssue) => {
-        callback(error, newIssue);
+  if (existingIssue) {
+    return updateIssue((error) => {
+      callback(error, existingIssue);
     });
+  }
 
-    function createIssue(done) {
-        debug("Issue doesn't exist, creating new issue...");
+  return createIssue((error, newIssue) => {
+    callback(error, newIssue);
+  });
 
-        return requestIssue(
-            source.url + "/rest/api/2/issue/",
-            "POST",
-            (error, response, body) => {
-                if (!error && !body) {
-                    return done(new Error("Could not create issue."));
-                }
+  function createIssue(done) {
+    debug('Issue doesn\'t exist, creating new issue...');
 
-                done(error, body);
-            }
-        );
-    }
+    return requestIssue(source.url + '/rest/api/2/issue/', 'POST', (error, response, body) => {
+      if (!error && !body) {
+        return done(new Error('Could not create issue.'));
+      }
 
-    function updateIssue(done) {
-        let issueId = existingIssue.id;
-        let issueKey = existingIssue.key;
+      done(error, body);
+    });
+  }
 
-        debug("Issue exists [%s], updating issue...", issueKey);
+  function updateIssue(done) {
+    let issueId = existingIssue.id;
+    let issueKey = existingIssue.key;
 
-        return requestIssue(
-            source.url + "/rest/api/2/issue/" + issueId,
-            "PUT",
-            done
-        );
-    }
+    debug('Issue exists [%s], updating issue...', issueKey);
 
-    function requestIssue(issueUrl, method, callback) {
-        let issue = {
-            fields: processFields()
-        };
+    return requestIssue(source.url + '/rest/api/2/issue/' + issueId, 'PUT', done);
+  }
 
-        debug("Sending issue: %s", JSON.stringify(issue, null, 2));
+  function requestIssue(issueUrl, method, callback) {
+    let issue = {
+      fields: processFields()
+    };
 
-        request(
-            {
-                method: method,
-                uri: issueUrl,
-                auth: {
-                    username: source.username,
-                    password: source.password
-                },
-                json: issue
-            },
-            (error, response, body) => {
-                if (error) {
-                    return callback(error);
-                }
+    debug('Sending issue: %s', JSON.stringify(issue, null, 2));
 
-                debugResponse(response);
-
-                if (response.statusCode < 200 || 300 <= response.statusCode) {
-                    return callback(new Error("Could not update Jira."));
-                }
-
-                callback(error, response, body);
-            }
-        );
-    }
-
-    function processFields() {
-        const standardFields = params.fields || {};
-
-        standardFields.summary = params.summary;
-
-        const customFields = parseCustomFields(params);
-        const nonExpandableCustomFields = _.pickBy(customFields, value => {
-            return typeof value === "object";
-        });
-        const expandableCustomFields = _.pickBy(customFields, value => {
-            return typeof value !== "object";
-        });
-        const expandableFields = _.merge(
-            expandableCustomFields,
-            standardFields
-        );
-
-        const expandedFields = _(expandableFields)
-            .mapValues(value => {
-                return replaceTextFileString(baseFileDir, value);
-            })
-            .mapValues(replaceNowString)
-            .value();
-
-        const fields = _.merge(nonExpandableCustomFields, expandedFields);
-
-        fields.project = { key: source.project };
-
-        if (params.issue_type) {
-            fields.issuetype = { name: params.issue_type };
-        }
-        if (params.parent) {
-            fields.parent = { key: params.parent };
+    request(
+      {
+        method: method,
+        uri: issueUrl,
+        auth: {
+          username: source.username,
+          password: source.password
+        },
+        json: issue
+      },
+      (error, response, body) => {
+        if (error) {
+          return callback(error);
         }
 
-        return fields;
-    }
+        debugResponse(response);
 
-    function replaceNowString(value) {
-        value = String(value);
-
-        return value.replace(
-            /\$NOW([-+][0-9]+)?([ywdhms])?/,
-            (match, change, unit) => {
-                let date = moment();
-
-                unit = unit || "m";
-
-                if (change) {
-                    date = date.add(change, unit);
-                }
-
-                return date.format();
-            }
-        );
-    }
-
-    function makeSelectListCustomFieldApiPayload(customField) {
-        if (value.value_id) {
-            return { id: value.value_id };
+        if (response.statusCode < 200 || 300 <= response.statusCode) {
+          return callback(new Error('Could not update Jira.'));
         }
 
-        return { value: value.value };
+        callback(error, response, body);
+      }
+    );
+  }
+
+  function processFields() {
+    const standardFields = params.fields || {};
+
+    standardFields.summary = params.summary;
+
+    const customFields = parseCustomFields(params);
+    const nonExpandableCustomFields = _.pickBy(customFields, (value) => {
+      return typeof value === 'object';
+    });
+    const expandableCustomFields = _.pickBy(customFields, (value) => {
+      return typeof value !== 'object';
+    });
+    const expandableFields = _.merge(expandableCustomFields, standardFields);
+
+    const expandedFields = _(expandableFields)
+      .mapValues((value) => {
+        return replaceTextFileString(baseFileDir, value);
+      })
+      .mapValues(replaceNowString)
+      .value();
+
+    const fields = _.merge(nonExpandableCustomFields, expandedFields);
+
+    fields.project = { key: source.project };
+
+    if (params.issue_type) {
+      fields.issuetype = { name: params.issue_type };
+    }
+    if (params.parent) {
+      fields.parent = { key: params.parent };
     }
 
-    function parseCustomFields(params) {
-        if (!params.custom_fields) {
-            return {};
-        }
+    return fields;
+  }
 
-        return _(params.custom_fields)
-            .mapKeys(value => "customfield_" + value.id)
-            .mapValues(value =>
-                customFieldFactory.buildCustomField(value).toApiPayload()
-            )
-            .value();
+  function replaceNowString(value) {
+    value = String(value);
+
+    return value.replace(/\$NOW([-+][0-9]+)?([ywdhms])?/, (match, change, unit) => {
+      let date = moment();
+
+      unit = unit || 'm';
+
+      if (change) {
+        date = date.add(change, unit);
+      }
+
+      return date.format();
+    });
+  }
+
+  function makeSelectListCustomFieldApiPayload(customField) {
+    if (value.value_id) {
+      return { id: value.value_id };
     }
+
+    return { value: value.value };
+  }
+
+  function parseCustomFields(params) {
+    if (!params.custom_fields) {
+      return {};
+    }
+
+    return _(params.custom_fields)
+      .mapKeys((value) => 'customfield_' + value.id)
+      .mapValues((value) => customFieldFactory.buildCustomField(value).toApiPayload())
+      .value();
+  }
 };
