@@ -1,8 +1,16 @@
 const fs = require('fs');
 
 module.exports = (baseFileDir, value) => {
-  if (typeof value !== 'object' || !value.file) {
+  /*
+  1. value (string): "some string"
+  2. value (object): {text: "some string", file: "file_path"}
+  3. value (object): {text: "some string"}
+  3. value (object): {file: "file_path"}
+  */
+  if (typeof value === 'string') {
     return value;
+  } else if (!value.file) {
+    return value.text;
   }
 
   let filePath = baseFileDir + '/' + value.file;
