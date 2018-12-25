@@ -13,7 +13,7 @@ module.exports = (baseFileDir, issue, source, params, callback) => {
     return callback(null, issue);
   }
 
-  const commentsUrl = source.url + '/rest/api/2/issue/' + issue.id + '/comment';
+  const commentsUrl = source.url + '/rest/api/2/issue/' + issue.id + '/comment/';
 
   debug('Adding comments...');
 

@@ -14,6 +14,7 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
     });
   }
 
+  // check before create issue
   if (!params.summary) {
     return done(new Error('"summary" field is required for creating new issue.'));
   }

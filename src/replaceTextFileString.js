@@ -7,7 +7,7 @@ module.exports = (baseFileDir, value) => {
   3. value (object): {text: "some string"}
   3. value (object): {file: "file_path"}
   */
-  if (typeof value === 'string') {
+  if (typeof value !== 'object') {
     return value;
   } else if (!value.file) {
     return value.text;

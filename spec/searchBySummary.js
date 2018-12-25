@@ -14,26 +14,51 @@ describe("searchBySummary", () => {
         nock.cleanAll();
     });
 
-    it("checks for an existing issue", done => {
-        let search = setupSearch();
+    it("checks for an existing issue by summary", done => {
+        let input = concourseInput();
 
-        out(concourseInput(), "", () => {
+        let search = setupSearch({
+            jql: 'project="ATP" AND summary~"' + input.params.summary + '" ORDER BY id DESC',
+            maxResults: 1,
+            fields: ["key", "summary"]
+        });
+
+        out(input, "", () => {
             expect(search.isDone()).to.be.true;
             done();
         });
     });
 });
 
-function setupSearch(issues, summary) {
-    issues = issues || [];
-    summary = summary || "TEST 1.106.0";
 
-    return nock(jira.url)
-        .post("/rest/api/2/search/", {
-            jql: 'project="ATP" AND summary~"' + summary + '" ORDER BY id DESC',
+describe("searchByIssueKey", () => {
+    beforeEach(() => {
+        nock.cleanAll();
+    });
+
+    it("checks for an existing issue by issue key", done => {
+        let input = concourseInput();
+        input.params.issue_key = "BUILD-1";
+
+        let search = setupSearch({
+            jql: 'project="ATP" AND key="' + input.params.issue_key + '" ORDER BY id DESC',
             maxResults: 1,
             fields: ["key", "summary"]
-        })
+        });
+
+        out(input, "", () => {
+            expect(search.isDone()).to.be.true;
+            done();
+        });
+    });
+});
+
+
+function setupSearch(expectedBody) {
+    issues = [];
+
+    return nock(jira.url)
+        .post("/rest/api/2/search/", expectedBody)
         .basicAuth({
             user: jira.user,
             pass: jira.pass
