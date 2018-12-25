@@ -108,14 +108,14 @@ _KEY_
 ```yaml
 issue_key: BUILD-11
 -------
-summary:
+issue_key:
   file: issue/key
 -------
-summary:
+issue_key:
   text: BUILD-$FILE
   file: issue/key
 -------
-summary:
+issue_key:
   text: BUILD-11
 ```
 
