@@ -5,12 +5,13 @@ const addWatchers = require('./addWatchers.js');
 const createOrUpdateIssue = require('./createOrUpdateIssue.js');
 const processTransitions = require('./processTransitions');
 const searchBySummary = require('./searchBySummary.js');
+const addComments = require('./addComments.js');
 
 module.exports = (input, baseFileDir, callback) => {
   const source = input.source;
   const params = input.params;
 
-  debug('Searching for issue: %s', input.params.summary);
+  debug('params: %s', input.params);
 
   async.waterfall(
     [
@@ -25,6 +26,9 @@ module.exports = (input, baseFileDir, callback) => {
       },
       (issue, next) => {
         processTransitions(issue, source, params, next);
+      },
+      (issue, next) => {
+        addComments(baseFileDir, issue, source, params, next);
       }
     ],
     (error, issue) => {

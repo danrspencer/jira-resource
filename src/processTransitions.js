@@ -47,9 +47,13 @@ module.exports = (issue, source, params, callback) => {
             (error, response, body) => {
               debugResponse(response);
 
-              let transitionId = _.filter(body.transitions, (transition) => {
+              let matchTransitions = _.filter(body.transitions, (transition) => {
                 return transition.name.toLowerCase() == transitionName.toLowerCase();
-              })[0].id;
+              });
+              if (matchTransitions.length <= 0) {
+                return done(new Error('Not found for: ' + transitionName + ", choices: " + body.transitions));
+              }
+              let transitionId = matchTransitions[0].id;
 
               next(error, transitionId);
             }

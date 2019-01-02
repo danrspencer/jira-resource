@@ -20,6 +20,7 @@ Create and update Jira tickets via Concourse
       - put: jira
         params:
             issue_type: Change
+            issue_key: BUILD-11
             summary: Build v1.0.1
             fields:
                 description: With some text
@@ -55,7 +56,7 @@ resource_types:
 
 #### $TEXT
 
-The `summary`, `fields` and `custom_fields` can be either a string value, or an object with `text` / `file` fields. If just the `file` is specified it is used to populate the field, if both `file` and `text` are specified then the file is substituted in to replace $FILE in the text.
+The `summary`, `fields` and `custom_fields` can be either a string value, or an object with `text` / `file` fields. If just the `file` or `text` is specified it is used to populate the field, if both `file` and `text` are specified then the file is substituted in to replace $FILE in the text.
 
 e.g.
 
@@ -71,6 +72,10 @@ description:
 
     $FILE
   file: messages/jira-message
+-------
+description:
+  text: |
+    Substitute text into this messaage
 ```
 
 #### $NOW
@@ -98,7 +103,24 @@ _KEY_
 
 #### Parameters
 
--   `summary`: _required_ The summary of the Jira Ticket. This is used as a unique identifier for the ticket for the purpose of updating / modifying. As such it's recommended you include something unique in the summary, such as the build version.
+-   `issue_key`: Just using for searching / updating existing issue. For searching / updating issue, priority is higher than searching by `summary`.
+
+```yaml
+issue_key: BUILD-11
+-------
+issue_key:
+  file: issue/key
+-------
+issue_key:
+  text: BUILD-$FILE
+  file: issue/key
+-------
+issue_key:
+  text: BUILD-11
+```
+
+-   `summary`: _required for create issue_ The summary of the Jira Ticket. This is used as a unique identifier for the ticket for the purpose of updating / modifying. As such it's recommended you include something unique in the summary, such as the build version. For searching/updating issue, priority is lower than searching by `summary`.
+
 
 ```yaml
 summary: Ticket Summary
@@ -168,6 +190,23 @@ transitions:
     - In Dev
 ```
 
+-   `comments`: Add comments.
+
+```yaml
+comments:
+    - content:
+        text: |
+            New comment
+            $FILE
+        file: messages/jira-release-notes
+    - content:
+        file: messages/jira-release-notes
+    - content:
+        text: |
+            New comment
+    - content: New comment
+```
+
 #### Order of execution
 
 When executing the Jira job the ticket is updated in the following order:
@@ -176,6 +215,7 @@ When executing the Jira job the ticket is updated in the following order:
 -   Create ticket / update ticket
 -   Add watchers
 -   Perform transitions
+-   Add comments
 
 If you need to perform actions in a different order, for example, transitions before adding watchers then multiple jobs are required.
 
@@ -270,6 +310,8 @@ jobs:
                     - lauren
                 transitions:
                     - Approve
+                comments:
+                    - content: New comment by consourse
 
 resources:
     - name: code-base

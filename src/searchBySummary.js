@@ -5,11 +5,18 @@ const debugResponse = require('./debugResponse.js');
 const replaceTextFileString = require('./replaceTextFileString.js');
 
 module.exports = (baseFileDir, source, params, callback) => {
-  debug('Searching for issue: %s', params.summary);
 
   const searchUrl = source.url + '/rest/api/2/search/';
-  const summary = replaceTextFileString(baseFileDir, params.summary);
-  const jql = 'project="' + source.project + '" AND summary~"' + summary + '" ORDER BY id DESC';
+  let jql = null;
+  if (params.issue_key) {
+    debug('Searching for issue by key: %s', params.issue_key);
+    const issue_key = replaceTextFileString(baseFileDir, params.issue_key);
+    jql = 'project="' + source.project + '" AND key="' + issue_key + '" ORDER BY id DESC';
+  } else {
+    debug('Searching for issue by summary: %s', params.summary);
+    const summary = replaceTextFileString(baseFileDir, params.summary);
+    jql = 'project="' + source.project + '" AND summary~"' + summary + '" ORDER BY id DESC';
+  }
 
   let search = {
     jql: jql,

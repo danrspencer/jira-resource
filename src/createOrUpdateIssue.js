@@ -14,6 +14,11 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
     });
   }
 
+  // check before create issue
+  if (!params.summary) {
+    return done(new Error('"summary" field is required for creating new issue.'));
+  }
+
   return createIssue((error, newIssue) => {
     callback(error, newIssue);
   });
@@ -75,7 +80,9 @@ module.exports = (baseFileDir, existingIssue, source, params, callback) => {
   function processFields() {
     const standardFields = params.fields || {};
 
-    standardFields.summary = params.summary;
+    if (params.summary) {
+      standardFields.summary = params.summary;
+    }
 
     const customFields = parseCustomFields(params);
     const nonExpandableCustomFields = _.pickBy(customFields, (value) => {
