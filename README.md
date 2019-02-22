@@ -182,7 +182,7 @@ watchers:
     - lauren
 ```
 
--   `transitions`: An array of string values for the ticket to be moved though. The transitions are conducted in the order specified.
+-   `transitions`: An array of string values for the ticket to be moved through. The transitions are conducted in the order specified.
 
 ```yaml
 transitions:
