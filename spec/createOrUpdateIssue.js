@@ -4,7 +4,8 @@ const expect = chai.expect;
 const moment = require("moment");
 const nock = require("nock");
 
-const createOrUpdateIssue = require("../src/createOrUpdateIssue.js");
+const createIssue = require("../src/createIssue.js");
+const createIssue = require("../src/updateIssue.js");
 
 const jira = require("./resources/jiraDetails.js");
 const concourseInput = require("./resources/concourseInput.js");
@@ -33,7 +34,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
@@ -55,7 +56,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue(
+            createIssue(
                 "",
                 null,
                 input.source,
@@ -90,7 +91,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
@@ -115,7 +116,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(createWithEnv.isDone()).to.be.true;
                 done();
             });
@@ -133,7 +134,7 @@ describe("create or update issue", () => {
                 return Math.abs(duedate.diff(now, "s")) < 1;
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(createWithDate.isDone()).to.be.true;
                 done();
             });
@@ -154,7 +155,7 @@ describe("create or update issue", () => {
                 return Math.abs(expectedDueDate.diff(duedate, "s")) < 1;
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(createWithDate.isDone()).to.be.true;
                 done();
             });
@@ -179,7 +180,7 @@ describe("create or update issue", () => {
                 );
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(createWithDate.isDone()).to.be.true;
                 done();
             });
@@ -209,7 +210,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(createWithCustom.isDone()).to.be.true;
                 done();
             });
@@ -240,7 +241,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(createWithCustom.isDone()).to.be.true;
                 done();
             });
@@ -271,7 +272,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(createWithCustom.isDone()).to.be.true;
                 done();
             });
@@ -306,7 +307,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(createWithCustom.isDone()).to.be.true;
                 done();
             });
@@ -340,7 +341,7 @@ describe("create or update issue", () => {
                     }
                 });
 
-            createOrUpdateIssue(
+                createIssue(
                 "",
                 null,
                 input.source,
@@ -358,7 +359,7 @@ describe("create or update issue", () => {
 
             const input = concourseInput();
 
-            createOrUpdateIssue(
+            createIssue(
                 "",
                 null,
                 input.source,
@@ -392,7 +393,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue("", null, input.source, input.params, () => {
+            createIssue("", null, input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
@@ -438,7 +439,7 @@ describe("create or update issue", () => {
         it("updates the issue", done => {
             let input = concourseInput();
 
-            createOrUpdateIssue("", issue, input.source, input.params, () => {
+            updateIssue("", issue, input.source, input.params, () => {
                 expect(update.isDone()).to.be.true;
                 done();
             });
@@ -447,7 +448,7 @@ describe("create or update issue", () => {
         it("returns the issue", done => {
             let input = concourseInput();
 
-            createOrUpdateIssue(
+            updateIssue(
                 "",
                 issue,
                 input.source,
@@ -499,7 +500,7 @@ describe("create or update issue", () => {
                     }
                 });
 
-            createOrUpdateIssue(
+            updateIssue(
                 "",
                 issue,
                 input.source,
@@ -516,7 +517,7 @@ describe("create or update issue", () => {
 
             let input = concourseInput();
 
-            createOrUpdateIssue(
+            updateIssue(
                 "",
                 issue,
                 input.source,
@@ -559,7 +560,7 @@ describe("create or update issue", () => {
                 })
                 .reply(201);
 
-            createOrUpdateIssue("", issue, input.source, input.params, () => {
+            updateIssue("", issue, input.source, input.params, () => {
                 expect(updateWithOnlySummary.isDone()).to.be.true;
                 done();
             });
@@ -588,7 +589,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue(dir, null, input.source, input.params, () => {
+            updateIssue(dir, null, input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
@@ -618,7 +619,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createOrUpdateIssue(dir, null, input.source, input.params, () => {
+            createIssue(dir, null, input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
