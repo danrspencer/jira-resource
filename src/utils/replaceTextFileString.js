@@ -15,6 +15,5 @@ module.exports = (baseFileDir, value) => {
 
   let filePath = baseFileDir + '/' + value.file;
   let fileContent = fs.readFileSync(filePath, 'utf-8').trim();
-
   return value.text ? value.text.replace('$FILE', fileContent) : fileContent;
 };

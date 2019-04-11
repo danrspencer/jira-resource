@@ -3,7 +3,7 @@ const async = require('async');
 const debug = require('debug')('jira-resource');
 const request = require('request');
 
-const debugResponse = require('./debugResponse.js');
+const debugResponse = require('./utils/debugResponse.js');
 
 module.exports = (issue, source, params, callback) => {
   if (!issue) {
