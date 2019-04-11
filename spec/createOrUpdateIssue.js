@@ -34,7 +34,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
@@ -58,16 +58,15 @@ describe("create or update issue", () => {
 
             createIssue(
                 "",
-                null,
                 input.source,
                 input.params,
                 (error, result) => {
                     expect(error).to.be.null;
-                    expect(result).to.deep.equal({
+                    expect(result).to.deep.equal([{
                         id: "15805",
                         key: "ATP-1",
                         self: "http://jira.comrest/api/2/issue/15805"
-                    });
+                    }]);
                     done();
                 }
             );
@@ -91,7 +90,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
@@ -116,7 +115,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(createWithEnv.isDone()).to.be.true;
                 done();
             });
@@ -134,7 +133,7 @@ describe("create or update issue", () => {
                 return Math.abs(duedate.diff(now, "s")) < 1;
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(createWithDate.isDone()).to.be.true;
                 done();
             });
@@ -155,7 +154,7 @@ describe("create or update issue", () => {
                 return Math.abs(expectedDueDate.diff(duedate, "s")) < 1;
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(createWithDate.isDone()).to.be.true;
                 done();
             });
@@ -180,7 +179,7 @@ describe("create or update issue", () => {
                 );
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(createWithDate.isDone()).to.be.true;
                 done();
             });
@@ -210,7 +209,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(createWithCustom.isDone()).to.be.true;
                 done();
             });
@@ -241,7 +240,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(createWithCustom.isDone()).to.be.true;
                 done();
             });
@@ -272,7 +271,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(createWithCustom.isDone()).to.be.true;
                 done();
             });
@@ -307,7 +306,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(createWithCustom.isDone()).to.be.true;
                 done();
             });
@@ -343,7 +342,6 @@ describe("create or update issue", () => {
 
                 createIssue(
                 "",
-                null,
                 input.source,
                 input.params,
                 (error, result) => {
@@ -361,7 +359,6 @@ describe("create or update issue", () => {
 
             createIssue(
                 "",
-                null,
                 input.source,
                 input.params,
                 (error, result) => {
@@ -393,7 +390,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createIssue("", null, input.source, input.params, () => {
+            createIssue("", input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
@@ -589,7 +586,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createIssue(dir, null, input.source, input.params, () => {
+            createIssue(dir, input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
@@ -619,7 +616,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            createIssue(dir, null, input.source, input.params, () => {
+            createIssue(dir, input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });

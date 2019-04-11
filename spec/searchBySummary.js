@@ -9,16 +9,16 @@ const concourseInput = require("./resources/concourseInput.js");
 
 nock.disableNetConnect();
 
-describe("searchBySummary", () => {
+describe("search", () => {
     beforeEach(() => {
         nock.cleanAll();
     });
 
-    it("checks for an existing issue by summary", done => {
+    it("search by summary", done => {
         let input = concourseInput();
 
         let search = setupSearch({
-            jql: 'project="ATP" AND summary~"' + input.params.summary + '" ORDER BY id DESC',
+            jql: 'project="ATP" AND summary~"' + input.params.summary + '"  ORDER BY id DESC',
             maxResults: 1,
             fields: ["key", "summary"]
         });
@@ -28,20 +28,14 @@ describe("searchBySummary", () => {
             done();
         });
     });
-});
 
 
-describe("searchByIssueKey", () => {
-    beforeEach(() => {
-        nock.cleanAll();
-    });
-
-    it("checks for an existing issue by issue key", done => {
+    it("search by issue_key", done => {
         let input = concourseInput();
         input.params.issue_key = "BUILD-1";
 
         let search = setupSearch({
-            jql: 'project="ATP" AND key="' + input.params.issue_key + '" ORDER BY id DESC',
+            jql: 'project="ATP" AND key="' + input.params.issue_key + '"  ORDER BY id DESC',
             maxResults: 1,
             fields: ["key", "summary"]
         });
@@ -51,6 +45,66 @@ describe("searchByIssueKey", () => {
             done();
         });
     });
+
+
+    it("search by issue_key and search_filters", done => {
+        let input = concourseInput();
+        input.params.issue_key = "BUILD-1";
+        input.params.search_filters = {
+            status: "Done"
+        }
+
+        let search = setupSearch({
+            jql: 'project="ATP" AND key="' + input.params.issue_key + '" AND status="Done" ORDER BY id DESC',
+            maxResults: 1,
+            fields: ["key", "summary"]
+        });
+
+        out(input, "", () => {
+            expect(search.isDone()).to.be.true;
+            done();
+        });
+    });
+
+
+    it("search by multiple issue_key and search_filters", done => {
+        let input = concourseInput();
+        input.params.issue_key = "BUILD-1,BUILD-2";
+        input.params.search_filters = {
+            status: "Done"
+        }
+
+        let search = setupSearch({
+            jql: 'project="ATP" AND key IN (' + input.params.issue_key + ') AND status="Done" ORDER BY id DESC',
+            maxResults: 2,
+            fields: ["key", "summary"]
+        });
+
+        out(input, "", () => {
+            expect(search.isDone()).to.be.true;
+            done();
+        });
+    });
+
+    it("search by summary and search_filters", done => {
+        let input = concourseInput();
+        input.params.summary = "Test summary";
+        input.params.search_filters = {
+            status: "Done"
+        }
+
+        let search = setupSearch({
+            jql: 'project="ATP" AND summary~"' + input.params.summary + '" AND status="Done" ORDER BY id DESC',
+            maxResults: 1,
+            fields: ["key", "summary"]
+        });
+
+        out(input, "", () => {
+            expect(search.isDone()).to.be.true;
+            done();
+        });
+    });
+
 });
 
 

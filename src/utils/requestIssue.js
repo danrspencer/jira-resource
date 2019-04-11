@@ -7,7 +7,6 @@ const debugResponse = require('./debugResponse.js');
 const replaceTextFileString = require('./replaceTextFileString.js');
 const customFieldFactory = require('./customFieldFactory.js')();
 
-
 module.exports = (baseFileDir, source, params, issueUrl, method, callback) => {
   let issue = {
     fields: processFields()
@@ -111,5 +110,4 @@ module.exports = (baseFileDir, source, params, issueUrl, method, callback) => {
       .mapValues((value) => customFieldFactory.buildCustomField(value).toApiPayload())
       .value();
   }
-}
-
+};

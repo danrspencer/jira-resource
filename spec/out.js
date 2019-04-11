@@ -32,7 +32,10 @@ describe("jira resource", () => {
 
         out(input, baseFileDir, (error, result) => {
             expect(error).to.be.null;
-            expect(result).to.deep.equal({ version: { ref: "ATP-51" } });
+            expect(result).to.deep.equal({
+                version: { ref: "none" },
+                metadata: [{ name: "ATP-51", "value": "http://jira.com/secure/QuickSearch.jspa?searchString=ATP-51"}]
+            });
 
             expect(create.isDone(), "create ticket").to.be.true;
             expect(watchers.isDone(), "add watchers").to.be.true;
@@ -62,7 +65,10 @@ describe("jira resource", () => {
 
         out(input, baseFileDir, (error, result) => {
             expect(error).to.be.null;
-            expect(result).to.deep.equal({ version: { ref: "ATP-1" } });
+            expect(result).to.deep.equal({
+                version: { ref: "none" },
+                metadata: [{ name: "ATP-1", "value": "http://jira.com/secure/QuickSearch.jspa?searchString=ATP-1"}]
+            });
 
             expect(update.isDone(), "create ticket").to.be.true;
             expect(watchers.isDone(), "add watchers").to.be.true;
@@ -110,14 +116,14 @@ describe("jira resource", () => {
     }
 
     function setupSearch(issue) {
-        let issues = [issue] || [];
+        let issues = issue ? [issue] : [];
 
         nock(jira.url)
             .post("/rest/api/2/search/", {
                 jql:
                     'project="ATP" AND summary~"' +
                     summary +
-                    '" ORDER BY id DESC',
+                    '"  ORDER BY id DESC',
                 maxResults: 1,
                 fields: ["key", "summary"]
             })
