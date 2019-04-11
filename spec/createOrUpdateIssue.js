@@ -5,7 +5,7 @@ const moment = require("moment");
 const nock = require("nock");
 
 const createIssue = require("../src/createIssue.js");
-const createIssue = require("../src/updateIssue.js");
+const updateIssue = require("../src/updateIssue.js");
 
 const jira = require("./resources/jiraDetails.js");
 const concourseInput = require("./resources/concourseInput.js");
@@ -589,7 +589,7 @@ describe("create or update issue", () => {
                 }
             });
 
-            updateIssue(dir, null, input.source, input.params, () => {
+            createIssue(dir, null, input.source, input.params, () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
