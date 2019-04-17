@@ -1,8 +1,8 @@
 const async = require('async');
 const debug = require('debug')('jira-resource');
 const request = require('request');
-const replaceTextFileString = require('./replaceTextFileString.js');
-const debugResponse = require('./debugResponse.js');
+const replaceTextFileString = require('./utils/replaceTextFileString.js');
+const debugResponse = require('./utils/debugResponse.js');
 
 module.exports = (baseFileDir, issue, source, params, callback) => {
   if (!issue) {

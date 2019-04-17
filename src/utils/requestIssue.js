@@ -7,75 +7,37 @@ const debugResponse = require('./debugResponse.js');
 const replaceTextFileString = require('./replaceTextFileString.js');
 const customFieldFactory = require('./customFieldFactory.js')();
 
-module.exports = (baseFileDir, existingIssue, source, params, callback) => {
-  if (existingIssue) {
-    return updateIssue((error) => {
-      callback(error, existingIssue);
-    });
-  }
+module.exports = (baseFileDir, source, params, issueUrl, method, callback) => {
+  let issue = {
+    fields: processFields()
+  };
 
-  // check before create issue
-  if (!params.summary) {
-    return done(new Error('"summary" field is required for creating new issue.'));
-  }
+  debug('Sending issue: %s', JSON.stringify(issue, null, 2));
 
-  return createIssue((error, newIssue) => {
-    callback(error, newIssue);
-  });
-
-  function createIssue(done) {
-    debug('Issue doesn\'t exist, creating new issue...');
-
-    return requestIssue(source.url + '/rest/api/2/issue/', 'POST', (error, response, body) => {
-      if (!error && !body) {
-        return done(new Error('Could not create issue.'));
-      }
-
-      done(error, body);
-    });
-  }
-
-  function updateIssue(done) {
-    let issueId = existingIssue.id;
-    let issueKey = existingIssue.key;
-
-    debug('Issue exists [%s], updating issue...', issueKey);
-
-    return requestIssue(source.url + '/rest/api/2/issue/' + issueId, 'PUT', done);
-  }
-
-  function requestIssue(issueUrl, method, callback) {
-    let issue = {
-      fields: processFields()
-    };
-
-    debug('Sending issue: %s', JSON.stringify(issue, null, 2));
-
-    request(
-      {
-        method: method,
-        uri: issueUrl,
-        auth: {
-          username: source.username,
-          password: source.password
-        },
-        json: issue
+  request(
+    {
+      method: method,
+      uri: issueUrl,
+      auth: {
+        username: source.username,
+        password: source.password
       },
-      (error, response, body) => {
-        if (error) {
-          return callback(error);
-        }
-
-        debugResponse(response);
-
-        if (response.statusCode < 200 || 300 <= response.statusCode) {
-          return callback(new Error('Could not update Jira.'));
-        }
-
-        callback(error, response, body);
+      json: issue
+    },
+    (error, response, body) => {
+      if (error) {
+        return callback(error);
       }
-    );
-  }
+
+      debugResponse(response);
+
+      if (response.statusCode < 200 || 300 <= response.statusCode) {
+        return callback(new Error('Could not update Jira.'));
+      }
+
+      callback(error, response, body);
+    }
+  );
 
   function processFields() {
     const standardFields = params.fields || {};

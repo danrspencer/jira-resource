@@ -108,6 +108,8 @@ _KEY_
 ```yaml
 issue_key: BUILD-11
 -------
+issue_key: BUILD-11,BUILD-12,BUILD-13
+-------
 issue_key:
   file: issue/key
 -------
@@ -205,6 +207,14 @@ comments:
         text: |
             New comment
     - content: New comment
+```
+
+-   `search_filters`: Custom filter when searching issues.
+
+```yaml
+search_filters:
+    status: Done
+    type: Bug
 ```
 
 #### Order of execution
