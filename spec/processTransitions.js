@@ -26,7 +26,7 @@ describe("processTransitions", () => {
             .get("/rest/api/2/issue/" + issue.id + "/transitions/")
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(200, {
                 expand: "transitions",
@@ -46,7 +46,7 @@ describe("processTransitions", () => {
             })
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204);
 
@@ -67,7 +67,7 @@ describe("processTransitions", () => {
             .get("/rest/api/2/issue/" + issue.id + "/transitions/")
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(200, {
                 expand: "transitions",
@@ -91,7 +91,7 @@ describe("processTransitions", () => {
             })
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204);
 
@@ -107,19 +107,19 @@ describe("processTransitions", () => {
 
         nock(jira.url)
             .get("/rest/api/2/issue/" + issue.id + "/transitions/")
-            .basicAuth({ user: jira.user, pass: jira.pass })
+            .basicAuth({ user: jira.user, pass: jira.token })
             .reply(200, {
                 expand: "transitions",
                 transitions: [{ id: "51", name: "Submit" }]
             })
             .get("/rest/api/2/issue/" + issue.id + "/transitions/")
-            .basicAuth({ user: jira.user, pass: jira.pass })
+            .basicAuth({ user: jira.user, pass: jira.token })
             .reply(200, {
                 expand: "transitions",
                 transitions: [{ id: "69", name: "Test" }]
             })
             .get("/rest/api/2/issue/" + issue.id + "/transitions/")
-            .basicAuth({ user: jira.user, pass: jira.pass })
+            .basicAuth({ user: jira.user, pass: jira.token })
             .reply(200, {
                 expand: "transitions",
                 transitions: [
@@ -134,21 +134,21 @@ describe("processTransitions", () => {
                     id: "51"
                 }
             })
-            .basicAuth({ user: jira.user, pass: jira.pass })
+            .basicAuth({ user: jira.user, pass: jira.token })
             .reply(204)
             .post("/rest/api/2/issue/" + issue.id + "/transitions/", {
                 transition: {
                     id: "69"
                 }
             })
-            .basicAuth({ user: jira.user, pass: jira.pass })
+            .basicAuth({ user: jira.user, pass: jira.token })
             .reply(204)
             .post("/rest/api/2/issue/" + issue.id + "/transitions/", {
                 transition: {
                     id: "13"
                 }
             })
-            .basicAuth({ user: jira.user, pass: jira.pass })
+            .basicAuth({ user: jira.user, pass: jira.token })
             .reply(204);
 
         processTransitions(issue, input.source, input.params, () => {
@@ -162,7 +162,7 @@ describe("processTransitions", () => {
             .get("/rest/api/2/issue/" + issue.id + "/transitions/")
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(200, {
                 expand: "transitions",
@@ -182,7 +182,7 @@ describe("processTransitions", () => {
             })
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204);
 

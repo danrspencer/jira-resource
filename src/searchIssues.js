@@ -87,8 +87,8 @@ module.exports = (baseFileDir, source, params, callback) => {
       method: 'POST',
       uri: searchUrl,
       auth: {
-        username: source.username,
-        password: source.password
+        username: source.email,
+        password: source.apitoken
       },
       json: search
     },

@@ -28,8 +28,8 @@ module.exports = (baseFileDir, issue, source, params, callback) => {
           method: 'POST',
           uri: commentsUrl,
           auth: {
-            username: source.username,
-            password: source.password
+            username: source.email,
+            password: source.apitoken
           },
           json: {
             body: content

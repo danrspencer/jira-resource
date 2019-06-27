@@ -29,7 +29,7 @@ describe("addWatchers", () => {
             .post("/rest/api/2/issue/15805/watchers/", '"user1"')
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204);
 
@@ -47,19 +47,19 @@ describe("addWatchers", () => {
             .post("/rest/api/2/issue/15805/watchers/", '"user1"')
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204)
             .post("/rest/api/2/issue/15805/watchers/", '"user2"')
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204)
             .post("/rest/api/2/issue/15805/watchers/", '"user3"')
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204);
 
