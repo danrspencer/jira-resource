@@ -11,8 +11,8 @@ module.exports = () => {
         },
         source: {
             url:      jira.url,
-            username: jira.user,
-            password: jira.pass,
+            email: jira.user,
+            apitoken: jira.token,
             project:  'ATP'
         }
     }

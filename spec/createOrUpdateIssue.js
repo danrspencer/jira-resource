@@ -330,7 +330,7 @@ describe("create or update issue", () => {
                 })
                 .basicAuth({
                     user: jira.user,
-                    pass: jira.pass
+                    pass: jira.token
                 })
                 .reply(400, {
                     errorMessages: [],
@@ -428,7 +428,7 @@ describe("create or update issue", () => {
                 })
                 .basicAuth({
                     user: jira.user,
-                    pass: jira.pass
+                    pass: jira.token
                 })
                 .reply(201);
         });
@@ -487,7 +487,7 @@ describe("create or update issue", () => {
                 })
                 .basicAuth({
                     user: jira.user,
-                    pass: jira.pass
+                    pass: jira.token
                 })
                 .reply(400, {
                     errorMessages: [],
@@ -536,8 +536,8 @@ describe("create or update issue", () => {
                 },
                 source: {
                     url: jira.url,
-                    username: jira.user,
-                    password: jira.pass,
+                    email: jira.user,
+                    apitoken: jira.token,
                     project: "ATP"
                 }
             };
@@ -553,7 +553,7 @@ describe("create or update issue", () => {
                 })
                 .basicAuth({
                     user: jira.user,
-                    pass: jira.pass
+                    pass: jira.token
                 })
                 .reply(201);
 
@@ -629,7 +629,7 @@ function setupCreateTask(expectedBody) {
         .post("/rest/api/2/issue/", expectedBody)
         .basicAuth({
             user: jira.user,
-            pass: jira.pass
+            pass: jira.token
         })
         .reply(200, {
             id: "15805",
@@ -643,7 +643,7 @@ function setupCreateSubTask(expectedBody) {
         .post("/rest/api/2/issue/", expectedBody)
         .basicAuth({
             user: jira.user,
-            pass: jira.pass
+            pass: jira.token
         })
         .reply(200, {
             id: "15806",

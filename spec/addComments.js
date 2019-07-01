@@ -29,7 +29,7 @@ describe("addComments", () => {
             .post("/rest/api/2/issue/15805/comment/", {body: "new comment"})
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(201);
 
@@ -51,19 +51,19 @@ describe("addComments", () => {
             .post("/rest/api/2/issue/15805/comment/", {body: "new comment 1"})
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(201)
             .post("/rest/api/2/issue/15805/comment/", {body: "new comment 2"})
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(201)
             .post("/rest/api/2/issue/15805/comment/", {body: "new comment 3"})
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(201);
 

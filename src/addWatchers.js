@@ -27,8 +27,8 @@ module.exports = (issue, source, params, callback) => {
           method: 'POST',
           uri: watchersUrl,
           auth: {
-            username: source.username,
-            password: source.password
+            username: source.email,
+            password: source.apitoken
           },
           json: watcher
         },

@@ -39,8 +39,8 @@ module.exports = (issue, source, params, callback) => {
               method: 'GET',
               uri: transitionUrl,
               auth: {
-                username: source.username,
-                password: source.password
+                username: source.email,
+                password: source.apitoken
               },
               json: true
             },
@@ -67,8 +67,8 @@ module.exports = (issue, source, params, callback) => {
               method: 'POST',
               uri: transitionUrl,
               auth: {
-                username: source.username,
-                password: source.password
+                username: source.email,
+                password: source.apitoken
               },
               json: {
                 transition: {

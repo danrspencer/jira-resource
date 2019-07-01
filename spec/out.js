@@ -108,8 +108,8 @@ describe("jira resource", () => {
             },
             source: {
                 url: jira.url,
-                username: jira.user,
-                password: jira.pass,
+                email: jira.user,
+                apitoken: jira.token,
                 project: "ATP"
             }
         };
@@ -129,7 +129,7 @@ describe("jira resource", () => {
             })
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(200, {
                 expand: "names,schema",
@@ -159,7 +159,7 @@ describe("jira resource", () => {
             })
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(200, {
                 id: issueId,
@@ -187,7 +187,7 @@ describe("jira resource", () => {
             })
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(201);
     }
@@ -197,13 +197,13 @@ describe("jira resource", () => {
             .post("/rest/api/2/issue/" + issueId + "/watchers/", '"dave"')
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204)
             .post("/rest/api/2/issue/" + issueId + "/watchers/", '"amier"')
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204);
     }
@@ -213,7 +213,7 @@ describe("jira resource", () => {
             .get("/rest/api/2/issue/" + issueId + "/transitions/")
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(200, {
                 expand: "transitions",
@@ -227,7 +227,7 @@ describe("jira resource", () => {
             .get("/rest/api/2/issue/" + issueId + "/transitions/")
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(200, {
                 expand: "transitions",
@@ -251,7 +251,7 @@ describe("jira resource", () => {
             })
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204)
             .post("/rest/api/2/issue/" + issueId + "/transitions/", {
@@ -261,7 +261,7 @@ describe("jira resource", () => {
             })
             .basicAuth({
                 user: jira.user,
-                pass: jira.pass
+                pass: jira.token
             })
             .reply(204);
     }

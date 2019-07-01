@@ -19,8 +19,8 @@ module.exports = (baseFileDir, source, params, issueUrl, method, callback) => {
       method: method,
       uri: issueUrl,
       auth: {
-        username: source.username,
-        password: source.password
+        username: source.email,
+        password: source.apitoken
       },
       json: issue
     },
