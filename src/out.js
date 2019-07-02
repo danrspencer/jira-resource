@@ -12,6 +12,12 @@ module.exports = (input, baseFileDir, callback) => {
   const source = input.source;
   const params = input.params;
 
+  // The Jira API basic auth interface allows the legacy, password-based
+  // and the new token-based credential combinations all the same, so
+  // transparently support both types to maintain backwards compatibility.
+  source.email = source.email || source.username;
+  source.token = source.token || source.password;
+
   debug('input params: %s', JSON.stringify(input.params));
 
   async.waterfall(

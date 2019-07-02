@@ -21,6 +21,25 @@ describe("jira resource", () => {
         nock.cleanAll();
     });
 
+    it("accepts legacy basic auth credentials", done => {
+        setupSearch();
+
+        const create = setupCreate();
+        const watchers = setupAddWatchers();
+        const transitions = setupTransitions();
+
+        let input = getInput();
+        delete input.source.email;
+        delete input.source.apitoken;
+        input.source.username = jira.user;
+        input.source.password = jira.token;
+
+        out(input, baseFileDir, (error) => {
+            expect(error).to.be.null;
+            done();
+        });
+    });
+
     it("can create a ticket", done => {
         setupSearch();
 
