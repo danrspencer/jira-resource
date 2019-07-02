@@ -28,7 +28,7 @@ Create and update Jira tickets via Concourse
 
 ## Source Configuration
 
-Jira no longer supports username and password credentials for its basic auth method and has switched to email and API token instead. You will need to generate an API token from an account with sufficient permissions to perform the actions this plugin supports. See [the Jira documentation](https://developer.atlassian.com/cloud/jira/platform/jira-rest-api-basic-authentication/) for more information.
+Newer versions of Jira no longer support username and password credentials for its basic auth method and have switched to email and API token instead. You will need to generate an API token from an account with sufficient permissions to perform the actions this plugin supports. See [the Jira documentation](https://developer.atlassian.com/cloud/jira/platform/jira-rest-api-basic-authentication/) for more information.
 
 ```yaml
 resources:
@@ -38,6 +38,19 @@ resources:
           url: https://xxxxx.atlassian.net
           email: xxxxx
           apitoken: xxxxx
+          project: APROJECT
+```
+
+If you are using an older version of Jira Server that still supports the deprecated password-based basic auth, you can keep using the previous set of source settings as below
+
+```yaml
+resources:
+    - name: jira
+      type: jira-resource
+      source:
+          url: https://xxxxx.atlassian.net
+          username: xxxxx
+          password: xxxxx
           project: APROJECT
 ```
 
