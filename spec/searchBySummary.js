@@ -115,7 +115,7 @@ function setupSearch(expectedBody) {
         .post("/rest/api/2/search/", expectedBody)
         .basicAuth({
             user: jira.user,
-            pass: jira.pass
+            pass: jira.token
         })
         .reply(200, {
             expand: "names,schema",
