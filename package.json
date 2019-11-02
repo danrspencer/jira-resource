@@ -42,7 +42,7 @@
   "dependencies": {
     "async": "^2.0.0-rc.6",
     "debug": "^2.2.0",
-    "lodash": "^4.13.1",
+    "lodash": "^4.17.13",
     "moment": "^2.13.0",
     "request": "^2.72.0"
   }
