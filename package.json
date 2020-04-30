@@ -11,7 +11,9 @@
     "test-report": "node node_modules/mocha/bin/mocha ./spec/ --async-only --reporter mocha-junit-reporter --reporter-options mochaFile=reports/junit/mocha.xml",
     "test-report-html": "node node_modules/mocha/bin/mocha ./spec/ --async-only --reporter mocha-simple-html-reporter --reporter-options output=reports/mocha.html",
     "test-report-coverage": "node ./node_modules/.bin/istanbul cover --report clover --dir reports/coverage src/*.js",
-    "test-with-coverage": "node ./node_modules/.bin/istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | codacy-coverage && rm -rf ./coverage"
+    "test-with-coverage": "node ./node_modules/.bin/istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | codacy-coverage && rm -rf ./coverage",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -44,6 +46,8 @@
     "debug": "^2.2.0",
     "lodash": "^4.17.13",
     "moment": "^2.13.0",
-    "request": "^2.72.0"
-  }
+    "request": "^2.72.0",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
