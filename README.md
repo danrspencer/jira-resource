@@ -136,7 +136,7 @@ issue_key:
   text: BUILD-11
 ```
 
--   `summary`: _required for create issue_ The summary of the Jira Ticket. This is used as a unique identifier for the ticket for the purpose of updating / modifying. As such it's recommended you include something unique in the summary, such as the build version. For searching/updating issue, priority is lower than searching by `summary`.
+-   `summary`: _required for create issue_ The summary of the Jira Ticket. This is used as a unique identifier for the ticket for the purpose of updating / modifying. As such it's recommended you include something unique in the summary, such as the build version. For searching/updating issue, priority is lower than searching by `issue_key`.
 
 
 ```yaml
