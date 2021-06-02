@@ -5,6 +5,7 @@ const request = require('request');
 
 const debugResponse = require('./debugResponse.js');
 const replaceTextFileString = require('./replaceTextFileString.js');
+const replaceEnvVarString = require('./replaceEnvVarString.js');
 const customFieldFactory = require('./customFieldFactory.js')();
 
 module.exports = (baseFileDir, source, params, issueUrl, method, callback) => {
@@ -60,6 +61,9 @@ module.exports = (baseFileDir, source, params, issueUrl, method, callback) => {
         return replaceTextFileString(baseFileDir, value);
       })
       .mapValues(replaceNowString)
+      .mapValues((value) => {
+        return replaceEnvVarString(value);
+      })
       .value();
 
     const fields = _.merge(nonExpandableCustomFields, expandedFields);

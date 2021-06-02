@@ -2,6 +2,7 @@ const async = require('async');
 const debug = require('debug')('jira-resource');
 const request = require('request');
 const replaceTextFileString = require('./utils/replaceTextFileString.js');
+const replaceEnvVarString = require('./utils/replaceEnvVarString.js');
 const debugResponse = require('./utils/debugResponse.js');
 
 module.exports = (baseFileDir, issue, source, params, callback) => {
@@ -20,7 +21,7 @@ module.exports = (baseFileDir, issue, source, params, callback) => {
   async.each(
     params.comments,
     (comment, next) => {
-      const content = replaceTextFileString(baseFileDir, comment.content);
+      const content = replaceEnvVarString(replaceTextFileString(baseFileDir, comment.content));
       debug('Adding: %s', content);
 
       request(

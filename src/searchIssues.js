@@ -4,6 +4,7 @@ const request = require('request');
 
 const debugResponse = require('./utils/debugResponse.js');
 const replaceTextFileString = require('./utils/replaceTextFileString.js');
+const replaceEnvVarString = require('./utils/replaceEnvVarString.js');
 
 
 function generateFilterStr(params) {
@@ -49,7 +50,7 @@ function searchByIssueKey(baseFileDir, source, params, custom_filter_str) {
 }
 
 function searchBySummary(baseFileDir, source, params, custom_filter_str) {
-  const summary = replaceTextFileString(baseFileDir, params.summary);
+  const summary = replaceEnvVarString(replaceTextFileString(baseFileDir, params.summary));
   debug('Searching for issue by summary: %s', summary);
 
   let jql = util.format(
