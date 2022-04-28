@@ -40,7 +40,7 @@
     "request-debug": "^0.2.0"
   },
   "dependencies": {
-    "async": "^2.0.0-rc.6",
+    "async": "^2.6.4",
     "debug": "^2.2.0",
     "lodash": "^4.17.16",
     "moment": "^2.13.0",
