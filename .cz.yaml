@@ -1,0 +1,8 @@
+commitizen:
+  bump_message: "release $current_version \u2192 $new_version [skip ci]"
+  changelog_incremental: true
+  name: cz_conventional_commits
+  tag_format: v$version
+  version: 0.2.20
+  version_files:
+  - .version

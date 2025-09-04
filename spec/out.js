@@ -138,13 +138,12 @@ describe("jira resource", () => {
         let issues = issue ? [issue] : [];
 
         nock(jira.url)
-            .post("/rest/api/2/search/", {
-                jql:
-                    'project="ATP" AND summary~"' +
+            .post("/rest/api/3/search/jql", {
+                jql: 'project="ATP" AND summary~"' +
                     summary +
                     '"  ORDER BY id DESC',
                 maxResults: 1,
-                fields: ["key", "summary"]
+                fields: ['key', 'summary']
             })
             .basicAuth({
                 user: jira.user,

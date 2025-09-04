@@ -14,8 +14,14 @@ const concourseInputSubTask = require("./resources/concourseInputSubTask.js");
 nock.disableNetConnect();
 
 describe("create or update issue", () => {
+    const env = Object.assign({}, process.env);
+
     beforeEach(() => {
         nock.cleanAll();
+    });
+
+    afterEach(() => {
+        process.env = env;
     });
 
     describe("create", () => {
@@ -620,6 +626,52 @@ describe("create or update issue", () => {
                 expect(create.isDone()).to.be.true;
                 done();
             });
+        });
+
+        it("parses Concourse Metadata environment variables", (done) => {
+
+            let input = concourseInput();
+            input.params.summary = {
+                text: "Summary - $FILE",
+                file: "resources/placeholders-summary.out"
+            };
+            input.params.fields.description = {
+                text: "Static text - $FILE",
+                file: "resources/placeholders-description.out"
+            };
+
+            process.env.BUILD_ID = 'test_build_id'
+            process.env.BUILD_NAME = 'test_build_name'
+            process.env.BUILD_JOB_NAME = 'test_build_job_name'
+            process.env.BUILD_PIPELINE_NAME = 'test_build_pipeline_name'
+            process.env.BUILD_PIPELINE_INSTANCE_VARS = '{"foo":"bar"}'
+            process.env.BUILD_TEAM_NAME = 'test_build_team_name'
+            process.env.ATC_EXTERNAL_URL = 'https://example.com'
+
+            let create = setupCreateTask({
+                fields: {
+                    project: {
+                        key: "ATP"
+                    },
+                    issuetype: {
+                        name: "Bug"
+                    },
+                    summary: "Summary - PIPELINE: test_build_pipeline_name",
+                    description: `Static text - BUILD_ID: test_build_id
+BUILD_NAME: test_build_name
+BUILD_JOB_NAME: test_build_job_name
+BUILD_PIPELINE_NAME: test_build_pipeline_name
+BUILD_PIPELINE_INSTANCE_VARS: vars.foo=%22bar%22
+BUILD_TEAM_NAME: test_build_team_name
+ATC_EXTERNAL_URL: https://example.com`
+                }
+            });
+
+            createIssue(dir, input.source, input.params, () => {
+                expect(create.isDone()).to.be.true;
+                done();
+            });
+
         });
     });
 });

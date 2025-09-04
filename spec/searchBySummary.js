@@ -112,7 +112,7 @@ function setupSearch(expectedBody) {
     issues = [];
 
     return nock(jira.url)
-        .post("/rest/api/2/search/", expectedBody)
+        .post("/rest/api/3/search/jql", expectedBody)
         .basicAuth({
             user: jira.user,
             pass: jira.token
